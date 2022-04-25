@@ -1,7 +1,9 @@
 from django.urls import path
-from django.views.generic import TemplateView
+from . import views
 
 
 urlpatterns = [
-    path('', TemplateView.as_view(template_name='elo/index.html'), name='index'),
+    path('', views.index, name='index'),
+    path('games/', views.games, name='games'),
+    path('players/', views.players, name='players')
 ]
