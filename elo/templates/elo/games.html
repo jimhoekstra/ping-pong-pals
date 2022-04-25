@@ -2,6 +2,57 @@
 
 {% block content %}
 
-<h1>Games</h1>
+<div class="row mt-4">
+    <h3>New game</h3>
+</div>
+
+<form class="my-3" action="{% url 'games' %}" method="post">
+    {% csrf_token %}
+    <div class="row align-items-center my-1">
+        <div class="col-md-3">Winner:</div>
+        <div class="col-md-9">
+            {{ new_game_form.winner.errors }}
+            {{ new_game_form.winner }}
+        </div>
+    </div>
+    <div class="row align-items-center my-1">
+        <div class="col-md-3">Loser:</div>
+        <div class="col-md-9">
+            {{ new_game_form.loser.errors }}
+            {{ new_game_form.loser }}
+        </div>
+    </div>
+    <div class="row my-2">
+        <div class="col-md-6"></div>
+        <div class="col-md-6">
+            <button type="submit" class="btn btn-success">Submit</button>
+        </div>
+    </div>
+</form>
+
+<div class="row mt-4">
+    <h3>Latest games</h3>
+</div>
+
+<div class="row my-3">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Date & Time</th>
+                <th>Winner</th>
+                <th>Loser</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for game in all_games %}
+                <tr>
+                    <td>{{ game.date|date:"D M jS - H:i" }}</td>
+                    <td>{{ game.winner.name }}</td>
+                    <td>{{ game.loser.name }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 
 {% endblock %}

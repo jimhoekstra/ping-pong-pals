@@ -2,6 +2,46 @@
 
 {% block content %}
 
-<h1>Players</h1>
+<div class="row mt-4">
+    <h3>All players</h3>
+</div>
+
+<div class="row my-3">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Elo</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for player in all_players %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ player.name }}</td>
+                    <td>{{ player.current_elo }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="row mt-4">
+    <h3>New player</h3>
+</div>
+
+<form action="{% url 'players' %}" method="post">
+    {% csrf_token %}
+    <div class="row my-3 align-items-center">
+        <div class="col-md-9">
+            {{ new_player_form.name.errors }}
+            {{ new_player_form.name }}
+        </div>
+        <div class="col-md-3 my-2">
+            <button type="submit" class="btn btn-success">Submit</button>
+        </div>
+    </div>
+</form>
 
 {% endblock %}

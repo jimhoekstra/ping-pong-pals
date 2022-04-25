@@ -1,9 +1,9 @@
 from django.urls import path
-from . import views
+from .views import index, GamesView, PlayersView
 
 
 urlpatterns = [
-    path('', views.index, name='index'),
-    path('games/', views.games, name='games'),
-    path('players/', views.players, name='players')
+    path('', index, name='index'),
+    path('games/', GamesView.as_view(), name='games'),
+    path('players/', PlayersView.as_view(), name='players')
 ]
