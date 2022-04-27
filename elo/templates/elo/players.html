@@ -2,6 +2,38 @@
 
 {% block content %}
 
+<div class="accordion" id="newPlayerAccordion">
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="headingOne">
+            <button class="accordion-button collapsed bg-success text-light" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#newPlayerCollapse" aria-expanded="false" aria-controls="newPlayerCollapse">
+                New Player
+            </button>
+        </h2>
+        <div id="newPlayerCollapse" class="accordion-collapse collapse" aria-labelledby="headingOne"
+                data-bs-parent="#newPlayerAccordion">
+            <div class="accordion-body bg-light">
+                <div class="row mt-4">
+                    <h3>New player</h3>
+                </div>
+                
+                <form action="{% url 'players' %}" method="post">
+                    {% csrf_token %}
+                    <div class="row my-3 align-items-center">
+                        <div class="col-md-9">
+                            {{ new_player_form.name.errors }}
+                            {{ new_player_form.name }}
+                        </div>
+                        <div class="col-md-3 my-2">
+                            <button type="submit" class="btn btn-success">Submit</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="row mt-4">
     <h3>All players</h3>
 </div>
@@ -26,22 +58,5 @@
         </tbody>
     </table>
 </div>
-
-<div class="row mt-4">
-    <h3>New player</h3>
-</div>
-
-<form action="{% url 'players' %}" method="post">
-    {% csrf_token %}
-    <div class="row my-3 align-items-center">
-        <div class="col-md-9">
-            {{ new_player_form.name.errors }}
-            {{ new_player_form.name }}
-        </div>
-        <div class="col-md-3 my-2">
-            <button type="submit" class="btn btn-success">Submit</button>
-        </div>
-    </div>
-</form>
 
 {% endblock %}

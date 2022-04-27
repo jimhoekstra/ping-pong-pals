@@ -2,40 +2,54 @@
 
 {% block content %}
 
-<div class="row mt-4">
-    <h3>New game</h3>
+<div class="accordion" id="newGameAccordion">
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="headingOne">
+            <button class="accordion-button collapsed bg-success text-light" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#newGameCollapse" aria-expanded="false" aria-controls="newGameCollapse">
+                New Game
+            </button>
+        </h2>
+        <div id="newGameCollapse" class="accordion-collapse collapse" aria-labelledby="headingOne"
+                data-bs-parent="#newGameAccordion">
+            <div class="accordion-body bg-light">
+                
+                <div class="row mt-4">
+                    <h3>New game</h3>
+                </div>
+                
+                <form class="my-3" action="{% url 'games' %}" method="post">
+                    {% csrf_token %}
+                    <div class="row align-items-center my-1">
+                        <div class="col-md-3">Winner:</div>
+                        <div class="col-md-9">
+                            {{ new_game_form.winner.errors }}
+                            {{ new_game_form.winner }}
+                        </div>
+                    </div>
+                    <div class="row align-items-center my-1">
+                        <div class="col-md-3">Loser:</div>
+                        <div class="col-md-9">
+                            {{ new_game_form.loser.errors }}
+                            {{ new_game_form.loser }}
+                        </div>
+                    </div>
+                    <div class="row my-2">
+                        <div class="col-md-6"></div>
+                        <div class="col-md-6">
+                            <button type="submit" class="btn btn-success">Submit</button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
 </div>
 
-<form class="my-3" action="{% url 'games' %}" method="post">
-    {% csrf_token %}
-    <div class="row align-items-center my-1">
-        <div class="col-md-3">Winner:</div>
-        <div class="col-md-9">
-            {{ new_game_form.winner.errors }}
-            {{ new_game_form.winner }}
-        </div>
-    </div>
-    <div class="row align-items-center my-1">
-        <div class="col-md-3">Loser:</div>
-        <div class="col-md-9">
-            {{ new_game_form.loser.errors }}
-            {{ new_game_form.loser }}
-        </div>
-    </div>
-    <div class="row my-2">
-        <div class="col-md-6"></div>
-        <div class="col-md-6">
-            <button type="submit" class="btn btn-success">Submit</button>
-        </div>
-    </div>
-</form>
-
-<div class="row mt-4">
-    <h3>Latest games</h3>
-</div>
-
-<div class="row my-3">
-    <table class="table">
+<div>
+    <h3 class="my-4">Latest games</h3>
+    <table class="table my-3">
         <thead>
             <tr>
                 <th>Date & Time</th>
