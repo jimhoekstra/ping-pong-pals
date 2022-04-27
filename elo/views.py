@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.views import View
 from .models import Game, Player
 from .forms import NewGameForm, NewPlayerForm
+from .elo import EloRating
 
 
 def index(request):
@@ -26,21 +27,18 @@ class GamesView(View):
         if form.is_valid():
             winner = Player.objects.get(pk=form.cleaned_data['winner'])
             loser = Player.objects.get(pk=form.cleaned_data['loser'])
+            elo_rating = EloRating(winner, loser)
 
             new_game = Game(
                 winner=winner,
                 loser=loser,
                 winner_elo_before=winner.current_elo,
-                winner_elo_after=winner.current_elo+100,
+                winner_elo_after=elo_rating.get_new_winner_rating(),
                 loser_elo_before=loser.current_elo,
-                loser_elo_after=loser.current_elo-100
+                loser_elo_after=elo_rating.get_new_loser_rating()
             )
             new_game.save()
-
-            winner.current_elo = winner.current_elo+100
-            loser.current_elo = loser.current_elo-100
-            winner.save()
-            loser.save()
+            elo_rating.commit_scores()
 
         return redirect('games')
 
