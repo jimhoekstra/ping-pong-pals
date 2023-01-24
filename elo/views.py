@@ -20,11 +20,11 @@ class GamesView(View):
         context['all_games'] = Game.objects.all().order_by('-date')
         return context
 
-    def get(self, request: HttpRequest):
+    def get(self, request: HttpRequest) -> HttpResponse:
         context = self.get_context_data()
         return render(request, 'elo/games.html', context=context)
 
-    def post(self, request: HttpRequest):
+    def post(self, request: HttpRequest) -> HttpResponse:
         form = NewGameForm(request.POST)
         if form.is_valid():
             winner = Player.objects.get(pk=form.cleaned_data['winner'])
@@ -54,11 +54,11 @@ class PlayersView(View):
         context['all_players'] = Player.objects.all().order_by('-current_elo')
         return context
 
-    def get(self, request: HttpRequest):
+    def get(self, request: HttpRequest) -> HttpResponse:
         context = self.get_context_data()
         return render(request, 'elo/players.html', context=context)
 
-    def post(self, request: HttpRequest):
+    def post(self, request: HttpRequest) -> HttpResponse:
         form = NewPlayerForm(request.POST)
         if form.is_valid():
             new_player = Player(name=form.cleaned_data['name'])
