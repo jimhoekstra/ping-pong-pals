@@ -10,7 +10,7 @@ class NewPlayerForm(forms.Form):
                 }))
 
 
-def get_all_players():
+def get_all_players() -> list[tuple[int, str]]:
     return [
             (player.pk, player.name) for player in Player.objects.all()
         ]

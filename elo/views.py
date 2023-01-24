@@ -1,28 +1,30 @@
+from typing import Any
 from django.shortcuts import render, redirect
 from django.views import View
+from django.http import HttpRequest, HttpResponse
 from .models import Game, Player
 from .forms import NewGameForm, NewPlayerForm
 from .elo import EloRating
 
 
-def index(request):
+def index(request: HttpRequest) -> HttpResponse:
     return redirect('games')
 
 
 class GamesView(View):
 
-    def get_context_data(self, **kwargs):
-        context = {}
+    def get_context_data(self, **kwargs: dict[str, Any]) -> dict[str, Any]:
+        context: dict[str, Any] = {}
         context['current_view'] = 'games'
         context['new_game_form'] = NewGameForm()
         context['all_games'] = Game.objects.all().order_by('-date')
         return context
 
-    def get(self, request):
+    def get(self, request: HttpRequest):
         context = self.get_context_data()
         return render(request, 'elo/games.html', context=context)
 
-    def post(self, request):
+    def post(self, request: HttpRequest):
         form = NewGameForm(request.POST)
         if form.is_valid():
             winner = Player.objects.get(pk=form.cleaned_data['winner'])
@@ -45,18 +47,18 @@ class GamesView(View):
 
 class PlayersView(View):
 
-    def get_context_data(self, **kwargs):
-        context = {}
+    def get_context_data(self, **kwargs: dict[str, Any]) -> dict[str, Any]:
+        context: dict[str, Any] = {}
         context['current_view'] = 'players'
         context['new_player_form'] = NewPlayerForm()
         context['all_players'] = Player.objects.all().order_by('-current_elo')
         return context
 
-    def get(self, request):
+    def get(self, request: HttpRequest):
         context = self.get_context_data()
         return render(request, 'elo/players.html', context=context)
 
-    def post(self, request):
+    def post(self, request: HttpRequest):
         form = NewPlayerForm(request.POST)
         if form.is_valid():
             new_player = Player(name=form.cleaned_data['name'])
