@@ -2,54 +2,23 @@
 
 {% block content %}
 
-<div class="accordion" id="newPlayerAccordion">
-    <div class="accordion-item border border-2 border-dark">
-        <h2 class="accordion-header" id="headingOne">
-            <button class="accordion-button collapsed bg-warning" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#newPlayerCollapse" aria-expanded="false" aria-controls="newPlayerCollapse">
-                New Player
-            </button>
-        </h2>
-        <div id="newPlayerCollapse" class="accordion-collapse collapse" aria-labelledby="headingOne"
-                data-bs-parent="#newPlayerAccordion">
-            <div class="accordion-body bg-light">
-                <div class="row mt-4">
-                    <h3>New player</h3>
-                </div>
-                
-                <form action="{% url 'players' %}" method="post">
-                    {% csrf_token %}
-                    <div class="row my-3 align-items-center">
-                        <div class="col-md-9">
-                            {{ new_player_form.name.errors }}
-                            {{ new_player_form.name }}
-                        </div>
-                        <div class="col-md-3 my-2">
-                            <button type="submit" class="btn btn-success">Submit</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
 <div>
-    <h3 class="my-4">All players</h3>
-    <table class="table my-3">
+    <table class="table-auto my-3 w-full">
         <thead>
-            <tr>
-                <th>#</th>
-                <th>Name</th>
-                <th>Elo</th>
+            <tr class="text-left border-b-2 border-slate-500 text-xl">
+                <th class="p-3">#</th>
+                <th class="p-3">name</th>
+                <th class="p-3">elo</th>
+                <th class="p-3">#games</th>
             </tr>
         </thead>
         <tbody>
             {% for player in all_players %}
                 <tr>
-                    <td>{{ forloop.counter }}</td>
-                    <td>{{ player.name }}</td>
-                    <td>{{ player.current_elo }}</td>
+                    <td class="py-2 px-3">{{ forloop.counter }}</td>
+                    <td class="py-2 px-3">{{ player.name }}</td>
+                    <td class="py-2 px-3">{{ player.current_elo }}</td>
+                    <td class="py-2 px-3">{{ player.num_games }}</td>
                 </tr>
             {% endfor %}
         </tbody>

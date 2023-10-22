@@ -1,0 +1,17 @@
+{% extends "elo/base.html" %}
+
+{% block content %}
+
+<div class="p-4 border-2 rounded bg-orange-100 border-sky-700 border-dashed mb-6">
+    <h2 class="text-3xl mb-5">Log In</h2>
+    <form action="{% url 'login-user' %}" method="post">
+        {% csrf_token %}
+        <input type="text" name="username" placeholder="username" class="w-full p-3 outline-offset-0 rounded my-2 
+            outline-none focus:outline-3 focus:outline-sky-500">
+        <input type="password" name="password" placeholder="password" class="w-full p-3 outline-offset-0 rounded my-2
+            outline-none focus:outline-3 focus:outline-sky-500">
+        <input type="submit" value="Submit" class="p-3 w-full bg-red-500 rounded text-white my-2 cursor-pointer">
+    </form>
+</div>
+
+{% endblock %}
