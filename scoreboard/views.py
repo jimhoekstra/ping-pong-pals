@@ -10,12 +10,19 @@ from .elo import EloRating
 
 @require_GET
 def home(request: HttpRequest) -> HttpResponse:
+    '''
+    Home page view.
+    '''
     return render(request, 'scoreboard/home.html')
 
 
 @login_required
 @require_GET
 def games(request: HttpRequest) -> HttpResponse:
+    '''
+    View of the most recent 20 games that have been played.
+    The page also includes a form for submitting a new game.
+    '''
     context: dict[str, Any] = {'current_view': 'games'}
     context['all_players'] = Player.objects.all()
     context['all_games'] = Game.objects.all().order_by('-date')[:20]
@@ -25,7 +32,10 @@ def games(request: HttpRequest) -> HttpResponse:
 @login_required
 @require_POST
 @require_POST_params(['winner', 'loser', 'winner-points', 'loser-points'])
-def new_game(request: HttpRequest) -> HttpResponse:   
+def new_game(request: HttpRequest) -> HttpResponse:
+    '''
+    Endpoint for submitting the results of a new game, to be added to the database.
+    '''
     winner_id = int(request.POST['winner'])
     loser_id = int(request.POST['loser'])
     if winner_id == loser_id:
@@ -54,6 +64,10 @@ def new_game(request: HttpRequest) -> HttpResponse:
 @login_required
 @require_GET
 def players(request: HttpRequest) -> HttpResponse:
+    '''
+    View of all the players, ordered by descending Elo rating, also showing
+    the number of games that a player has logged.
+    '''
     context: dict[str, Any] = {'current_view': 'players'}
     all_players = Player.objects.all().order_by('-current_elo')
 
