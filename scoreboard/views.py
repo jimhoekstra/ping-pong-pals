@@ -3,14 +3,14 @@ from django.shortcuts import render, redirect
 from django.http import HttpRequest, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_GET, require_POST
-from elo.decorators import require_POST_params
+from scoreboard.decorators import require_POST_params
 from .models import Game, Player
 from .elo import EloRating
 
 
 @require_GET
 def home(request: HttpRequest) -> HttpResponse:
-    return render(request, 'elo/home.html')
+    return render(request, 'scoreboard/home.html')
 
 
 @login_required
@@ -19,7 +19,7 @@ def games(request: HttpRequest) -> HttpResponse:
     context: dict[str, Any] = {'current_view': 'games'}
     context['all_players'] = Player.objects.all()
     context['all_games'] = Game.objects.all().order_by('-date')[:20]
-    return render(request, 'elo/games.html', context=context)
+    return render(request, 'scoreboard/games.html', context=context)
 
 
 @login_required
@@ -64,4 +64,4 @@ def players(request: HttpRequest) -> HttpResponse:
     } for player in all_players]
     context['all_players'] = all_players
     
-    return render(request, 'elo/players.html', context=context)
+    return render(request, 'scoreboard/players.html', context=context)
