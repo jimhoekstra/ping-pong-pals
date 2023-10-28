@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 
 class Player(models.Model):
     name = models.CharField(max_length=25)
-    current_elo = models.IntegerField(default=800)
+    current_elo = models.IntegerField(default=1000)
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
@@ -23,3 +23,6 @@ class Game(models.Model):
     winner_elo_after = models.FloatField()
     loser_elo_before = models.FloatField()
     loser_elo_after = models.FloatField()
+
+    def __str__(self):
+        return self.winner.name + ' vs ' + self.loser.name + ' (' + str(self.winner_points) + '-' + str(self.loser_points) + ')'
