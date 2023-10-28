@@ -4,7 +4,7 @@ from django.http import HttpRequest, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_GET, require_POST
 from scoreboard.decorators import require_POST_params
-from .models import Game, Player
+from .models import Game, Player, PlayerScore
 from .elo import EloRating
 
 
@@ -13,7 +13,8 @@ def home(request: HttpRequest) -> HttpResponse:
     '''
     Home page view.
     '''
-    return render(request, 'scoreboard/home.html')
+    context_data: dict[str, Any] = {'current_view': 'home'}
+    return render(request, 'scoreboard/home.html', context=context_data)
 
 
 @login_required
@@ -38,6 +39,13 @@ def new_game(request: HttpRequest) -> HttpResponse:
     '''
     winner_id = int(request.POST['winner'])
     loser_id = int(request.POST['loser'])
+
+    try:
+        winner_points = int(request.POST['winner-points'])
+        loser_points = int(request.POST['loser-points'])
+    except ValueError:
+        return render(request, 'scoreboard/bad_request.html', status=400)
+
     if winner_id == loser_id:
         return redirect('games')
     
@@ -48,15 +56,11 @@ def new_game(request: HttpRequest) -> HttpResponse:
     new_game = Game(
         winner=winner_obj,
         loser=loser_obj,
-        winner_points=request.POST['winner-points'],
-        loser_points=request.POST['loser-points'],
-        winner_elo_before=winner_obj.current_elo,
-        winner_elo_after=elo_rating.get_new_winner_rating(),
-        loser_elo_before=loser_obj.current_elo,
-        loser_elo_after=elo_rating.get_new_loser_rating()
+        winner_points=winner_points,
+        loser_points=loser_points
     )
     new_game.save()
-    elo_rating.commit_scores()
+    elo_rating.commit_scores(game=new_game)
 
     return redirect('games')
 
@@ -79,3 +83,22 @@ def players(request: HttpRequest) -> HttpResponse:
     context['all_players'] = all_players
     
     return render(request, 'scoreboard/players.html', context=context)
+
+
+@login_required
+@require_GET
+def player(request: HttpRequest, player_name: str) -> HttpResponse:
+    '''
+    See a player's game and score history.
+    '''
+    context_data: dict[str, Any] = {'current_view': 'players'}
+
+    try:
+        player_obj = Player.objects.get(name=player_name)
+    except Player.DoesNotExist:
+        return render(request, 'scoreboard/bad_request.html', status=400)
+    
+    player_scores = PlayerScore.objects.filter(player=player_obj).order_by('-datetime')
+    context_data['player_scores'] = player_scores
+    context_data['player_name'] = player_obj.name
+    return render(request, 'scoreboard/player.html', context=context_data)

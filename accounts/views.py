@@ -1,8 +1,12 @@
+from typing import Any
 from django.shortcuts import render, redirect
 from django.http import HttpRequest, HttpResponse
 from scoreboard.decorators import require_POST_params
 from django.views.decorators.http import require_GET, require_POST
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
+from accounts.models import SignupKey
+from scoreboard.models import Player
 
 
 @require_GET
@@ -10,7 +14,15 @@ def login_page(request: HttpRequest) -> HttpResponse:
     '''
     View of the login page.
     '''
-    return render(request, 'accounts/login.html')
+
+    context_data: dict[str, Any] = {'current_view': 'login'}
+    if 'next' in request.GET:
+        if request.GET['next'] == '/games':
+            context_data['next_page'] = 'games'
+        elif request.GET['next'] == '/players':
+            context_data['next_page'] = 'players'
+    
+    return render(request, 'accounts/login.html', context=context_data)
 
 
 @require_POST
@@ -26,7 +38,14 @@ def login_user(request: HttpRequest) -> HttpResponse:
         return render(request, 'scoreboard/bad_request.html', status=400)
     
     login(request, user)
-    return redirect('players')
+
+    if 'next-page' in request.POST:
+        if request.POST['next-page'] == 'games':
+            return redirect('games')
+        elif request.POST['next-page'] == 'players':
+            return redirect('players')
+
+    return redirect('home')
 
 
 @require_GET
@@ -37,3 +56,33 @@ def logout_user(request: HttpRequest) -> HttpResponse:
     '''
     logout(request)
     return redirect('login-page')
+
+
+@require_POST
+@require_POST_params(['username', 'password', 'repeat-password', 'signup-key'])
+def create_account(request: HttpRequest) -> HttpResponse:
+    '''
+    Endpoint for creating a new account, this also logs in the new user if created successfully.
+    '''
+
+    try:
+        signup_key = SignupKey.objects.get(code=request.POST['signup-key'])
+    except SignupKey.DoesNotExist:
+        return render(request, 'scoreboard/bad_request.html', status=400)
+    
+    if request.POST['password'] != request.POST['repeat-password']:
+        return render(request, 'scoreboard/bad_request.html', status=400)
+    
+    new_user = User.objects.create_user(username=request.POST['username'], password=request.POST['password'])
+    new_user.save()
+
+    new_player = Player(name=new_user.username, user=new_user)
+    new_player.save()    
+
+    signup_key.used = True
+    signup_key.used_by = new_user
+    signup_key.save()
+
+    login(request, new_user)
+
+    return redirect('home')

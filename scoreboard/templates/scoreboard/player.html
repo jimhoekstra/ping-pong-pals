@@ -1,0 +1,38 @@
+{% extends "scoreboard/base.html" %}
+
+{% block content %}
+
+<div>
+    <h1 class="text-3xl mb-5">{{ player_name }}</h1>
+    <table class="table-auto my-3 w-full">
+        <thead>
+            <tr class="text-left border-b-2 border-slate-500 lg:text-xl">
+                <th class="p-3">date & time</th>
+                <th class="p-3">elo</th>
+                <th class="p-3">game</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for player_score in player_scores %}
+                <tr>
+                    <td class="py-2 px-3">{{ player_score.datetime|date:"D M jS - H:i" }}</td>
+                    <td class="py-2 px-3">{{ player_score.score }}</td>
+                    <td class="py-2 px-3">
+                        {% if player_score.after_game.winner == player_score.player %}
+                            won from <a class="underline text-sky-600" href="{% url 'player' player_score.after_game.loser.name %}">
+                                {{ player_score.after_game.loser.name }}</a> 
+                            with {{ player_score.after_game.winner_points }}-{{ player_score.after_game.loser_points }} 
+                        {% endif %}
+                        {% if player_score.after_game.loser == player_score.player %}
+                            lost from <a class="underline text-sky-600" href="{% url 'player' player_score.after_game.winner.name %}">
+                                {{ player_score.after_game.winner.name }}</a> 
+                            with {{ player_score.after_game.winner_points }}-{{ player_score.after_game.loser_points }} 
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

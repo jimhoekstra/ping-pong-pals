@@ -1,4 +1,4 @@
-from .models import Player
+from .models import Player, Game, PlayerScore
 
 
 class EloRating:
@@ -26,7 +26,7 @@ class EloRating:
         self.new_winner_rating = self.winner.current_elo + change_in_winner_rating
         self.new_loser_rating = self.loser.current_elo + change_in_loser_rating
 
-    def commit_scores(self):
+    def commit_scores(self, game: Game):
         if self.new_winner_rating is None or self.new_loser_rating is None:
             raise ValueError('new ratings have not yet been computed')
         
@@ -35,6 +35,20 @@ class EloRating:
 
         self.loser.current_elo = self.new_loser_rating
         self.loser.save()
+        
+        new_winner_player_score = PlayerScore(
+            player=self.winner,
+            score=self.new_winner_rating,
+            after_game=game
+        )
+        new_winner_player_score.save()
+
+        new_loser_player_score = PlayerScore(
+            player=self.loser,
+            score=self.new_loser_rating,
+            after_game=game
+        )
+        new_loser_player_score.save()
 
     def get_new_winner_rating(self):
         if self.new_winner_rating is None:

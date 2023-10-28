@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<div class="p-4 border-2 rounded bg-orange-100 border-slate-300 border-dashed mb-6">
+<div class="p-4 border-2 rounded bg-orange-100 border-sky-700 border-dashed mb-6">
     <h2 class="text-3xl text-center">New Game</h2>
     <form action="{% url 'new-game' %}" method="post">
         {% csrf_token %}
@@ -12,7 +12,7 @@
                 <option value="{{ player.pk }}">{{ player.name }}</option>
             {% endfor %}
         </select>
-        <input type="number" class="w-full p-3 rounded my-2 outline-none focus:outline-3 
+        <input type="number" class="w-full p-3 rounded my-2 outline-none focus:outline-4 
             focus:outline-orange-500 outline-offset-0" name="winner-points" placeholder="points">
         <p>Loser:</p>
         <select name="loser" class="w-full bg-white rounded p-3 my-2">
@@ -20,28 +20,35 @@
                 <option value="{{ player.pk }}">{{ player.name }}</option>
             {% endfor %}
         </select>
-        <input type="number" class="w-full p-3 rounded my-2 outline-none focus:outline-3 
+        <input type="number" class="w-full p-3 rounded my-2 outline-none focus:outline-4 
             focus:outline-orange-500 outline-offset-0" name="loser-points" placeholder="points">
-        <input type="submit" value="Submit" class="p-3 w-full bg-red-500 rounded text-white cursor-pointer my-2">
+        <input type="submit" value="Submit" class="p-3 w-full bg-red-500 rounded text-white cursor-pointer my-2
+            shadow shadow-red-400">
     </form>
 </div>
 
 <div class="mb-20">
     <table class="table-auto my-3 w-full">
         <thead>
-            <tr class="text-left border-b-2 border-slate-500 text-xl">
+            <tr class="text-left border-b-2 border-slate-500 lg:text-xl">
                 <th class="p-3">date & time</th>
                 <th class="p-3">winner</th>
                 <th class="p-3">loser</th>
                 <th class="p-3">score</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody class="text-sm lg:text-base">
             {% for game in all_games %}
                 <tr>
                     <td class="px-3 py-2">{{ game.date|date:"D M jS - H:i" }}</td>
-                    <td class="px-3 py-2">{{ game.winner.name }}</td>
-                    <td class="px-3 py-2">{{ game.loser.name }}</td>
+                    <td class="px-3 py-2">
+                        <a href="{% url 'player' game.winner.name %}" class="underline text-sky-600">
+                        {{ game.winner.name }}</a>
+                    </td>
+                    <td class="px-3 py-2">
+                        <a href="{% url 'player' game.loser.name %}" class="underline text-sky-600">
+                        {{ game.loser.name }}</a>
+                    </td>
                     <td class="px-3 py-2">{{ game.winner_points }}-{{ game.loser_points }}</td>
                 </tr>
             {% endfor %}
