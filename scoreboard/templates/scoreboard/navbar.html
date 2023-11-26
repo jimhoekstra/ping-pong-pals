@@ -1,13 +1,14 @@
-<nav class="font-mono flex p-6 mb-10 border-b-4 border-gray-900 bg-red-500 
+<nav class="font-mono flex p-6 mb-8 border-b-4 border-gray-900 bg-red-500 
         text-white lg:text-xl justify-center shadow shadow-red-400">
     <a href="{% url 'home' %}" class="mx-2 lg:mx-6
         {% if current_view == 'home' %} underline underline-offset-8 decoration-4{% endif %}">🏡 home</a>
     <a href="{% url 'games' %}" class="mx-2 lg:mx-6
         {% if current_view == 'games' %} underline underline-offset-8 decoration-4{% endif %}">🏓 games</a>
     <a href="{% url 'players' %}" class="mx-2 lg:mx-6
-        {% if current_view == 'players' %} underline underline-offset-8 decoration-4{% endif %}">🙋‍♀️ players</a>
+        {% if current_view == 'players' %} underline underline-offset-8 decoration-4{% endif %}">🤼 players</a>
     {% if user.is_authenticated %}
-        <a href="{% url 'logout-user' %}" class="mx-2 lg:mx-6">😎 logout</a>
+        <a href="{% url 'account-overview' %}" class="mx-2 lg:mx-6
+            {% if current_view == 'account' %} underline underline-offset-8 decoration-4{% endif %}">🤗 account</a>
     {% else %}
         <a href="{% url 'login-page' %}" class="mx-2 lg:mx-6
             {% if current_view == 'login' %} underline underline-offset-8 decoration-4{% endif %}">📝 login</a>

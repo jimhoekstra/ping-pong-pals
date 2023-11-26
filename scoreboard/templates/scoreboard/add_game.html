@@ -1,0 +1,30 @@
+{% extends "scoreboard/base.html" %}
+
+{% block content %}
+
+<div class="p-4 border-2 rounded bg-orange-100 border-sky-700 border-dashed mb-6">
+    <h2 class="text-3xl">New Game</h2>
+    <form action="{% url 'new-game' %}" method="post">
+        {% csrf_token %}
+        <h2 class="mt-4 text-xl">winner</h2>
+        <select name="winner" class="w-full bg-white rounded p-3 my-2">
+            {% for player in all_players %}
+                <option value="{{ player.pk }}">{{ player.name }}</option>
+            {% endfor %}
+        </select>
+        <input type="number" class="w-full p-3 rounded my-2 outline-none focus:outline-4 
+            focus:outline-orange-500 outline-offset-0" name="winner-points" placeholder="points">
+        <h2 class="mt-4 text-xl">loser</h2>
+        <select name="loser" class="w-full bg-white rounded p-3 my-2">
+            {% for player in all_players %}
+                <option value="{{ player.pk }}">{{ player.name }}</option>
+            {% endfor %}
+        </select>
+        <input type="number" class="w-full p-3 rounded my-2 outline-none focus:outline-4 
+            focus:outline-orange-500 outline-offset-0" name="loser-points" placeholder="points">
+        <input type="submit" value="Submit" class="p-3 w-full bg-red-500 rounded text-white cursor-pointer my-2
+            shadow shadow-red-400">
+    </form>
+</div>
+
+{% endblock %}

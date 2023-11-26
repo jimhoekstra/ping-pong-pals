@@ -12,7 +12,7 @@ def require_POST_params(POST_params: list[str]):
         def wrapper(request: HttpRequest, *args, **kwargs):
             for POST_param in POST_params:
                 if POST_param not in request.POST:
-                    return render(request, 'elo/bad_request.html', status=400)
+                    return render(request, 'scoreboard/bad_request.html', status=400)
 
             return func(request, *args, **kwargs)
         

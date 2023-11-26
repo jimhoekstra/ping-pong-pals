@@ -27,7 +27,7 @@
 <div class="p-4 border-2 rounded bg-orange-100 border-sky-700 border-dashed mb-6">
     <h2 class="text-3xl mb-5">Or, create a new account</h2>
     <p class="mb-3">
-        To create an account, you need a signup key. Please ask your friendly local administrator for a signup key.
+        To create an account, you need a signup key. Please ask an administrator for a signup key.
     </p>
     <form action="{% url 'create-account' %}" method="post">
         {% csrf_token %}

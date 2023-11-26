@@ -1,4 +1,5 @@
 from typing import Any
+from math import ceil
 from django.shortcuts import render, redirect
 from django.http import HttpRequest, HttpResponse
 from django.contrib.auth.decorators import login_required
@@ -19,15 +20,30 @@ def home(request: HttpRequest) -> HttpResponse:
 
 @login_required
 @require_GET
-def games(request: HttpRequest) -> HttpResponse:
+def games(request: HttpRequest, page: int = 1) -> HttpResponse:
     '''
     View of the most recent 20 games that have been played.
     The page also includes a form for submitting a new game.
     '''
+    GAMES_PER_PAGE: int = 10
+    total_number_of_games = Game.objects.count()
+
+    if page > ceil(total_number_of_games / GAMES_PER_PAGE):
+        return redirect('games')
+
+    context: dict[str, Any] = {'current_view': 'games'}
+    context['all_games'] = Game.objects.all().order_by('-date')[(page-1)*GAMES_PER_PAGE:(page)*GAMES_PER_PAGE]
+    context['pages'] = list(range(1, ceil(total_number_of_games / GAMES_PER_PAGE)+1))
+    context['current_page'] = page
+    return render(request, 'scoreboard/games.html', context=context)
+
+
+@login_required
+@require_GET
+def add_game(request: HttpRequest) -> HttpResponse:
     context: dict[str, Any] = {'current_view': 'games'}
     context['all_players'] = Player.objects.all()
-    context['all_games'] = Game.objects.all().order_by('-date')[:20]
-    return render(request, 'scoreboard/games.html', context=context)
+    return render(request, 'scoreboard/add_game.html', context=context)
 
 
 @login_required
@@ -80,17 +96,22 @@ def players(request: HttpRequest) -> HttpResponse:
         'current_elo': player.current_elo,
         'num_games': len(player.won_games.all()) + len(player.lost_games.all())  # type: ignore
     } for player in all_players]
-    context['all_players'] = all_players
+
+    rated_players = [_player for _player in all_players if _player['num_games'] >= 3]
+    unrated_players = [_player for _player in all_players if _player['num_games'] < 3]
+    context['rated_players'] = rated_players
+    context['unrated_players'] = unrated_players
     
     return render(request, 'scoreboard/players.html', context=context)
 
 
 @login_required
 @require_GET
-def player(request: HttpRequest, player_name: str) -> HttpResponse:
+def player(request: HttpRequest, player_name: str, page: int = 1) -> HttpResponse:
     '''
     See a player's game and score history.
     '''
+    GAMES_PER_PAGE: int = 10
     context_data: dict[str, Any] = {'current_view': 'players'}
 
     try:
@@ -98,7 +119,13 @@ def player(request: HttpRequest, player_name: str) -> HttpResponse:
     except Player.DoesNotExist:
         return render(request, 'scoreboard/bad_request.html', status=400)
     
-    player_scores = PlayerScore.objects.filter(player=player_obj).order_by('-datetime')
+    total_games_for_player = PlayerScore.objects.filter(player=player_obj).count()
+    
+    player_scores = PlayerScore.objects.filter(player=player_obj).order_by('-datetime')[
+        (page-1)*GAMES_PER_PAGE:page*GAMES_PER_PAGE]
+    
     context_data['player_scores'] = player_scores
     context_data['player_name'] = player_obj.name
+    context_data['pages'] = list(range(1, ceil(total_games_for_player / GAMES_PER_PAGE)+1))
+    context_data['current_page'] = page
     return render(request, 'scoreboard/player.html', context=context_data)

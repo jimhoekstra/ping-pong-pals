@@ -4,19 +4,18 @@
 
 <div>
     <h1 class="text-3xl mb-5">{{ player_name }}</h1>
-    <table class="table-auto my-3 w-full">
+    <table class="table-auto my-3 w-full mb-10">
         <thead>
             <tr class="text-left border-b-2 border-slate-500 lg:text-xl">
-                <th class="p-3">date & time</th>
-                <th class="p-3">elo</th>
+                <th class="p-3 hidden lg:block">date & time</th>
                 <th class="p-3">game</th>
+                <th class="p-3">elo after game</th>
             </tr>
         </thead>
         <tbody>
             {% for player_score in player_scores %}
                 <tr>
-                    <td class="py-2 px-3">{{ player_score.datetime|date:"D M jS - H:i" }}</td>
-                    <td class="py-2 px-3">{{ player_score.score }}</td>
+                    <td class="py-2 px-3 hidden lg:block">{{ player_score.datetime|date:"D M jS - H:i" }}</td>
                     <td class="py-2 px-3">
                         {% if player_score.after_game.winner == player_score.player %}
                             won from <a class="underline text-sky-600" href="{% url 'player' player_score.after_game.loser.name %}">
@@ -29,10 +28,16 @@
                             with {{ player_score.after_game.winner_points }}-{{ player_score.after_game.loser_points }} 
                         {% endif %}
                     </td>
+                    <td class="py-2 px-3">{{ player_score.score }}</td>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
+
+    {% for page in pages %}
+        <a href="{% url 'player' player_name page %}" class="rounded-md py-3 px-4 bg-orange-200
+                {% if page == current_page %} border-4 border-red-600{% endif %}">{{ page }}</a>
+    {% endfor %}
 </div>
 
 {% endblock %}

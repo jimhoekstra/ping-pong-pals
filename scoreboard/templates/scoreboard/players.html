@@ -4,6 +4,9 @@
 
 <div>
     <h1 class="text-3xl mb-5">Leaderboard</h1>
+    <p class="mb-3">
+        You need to play at least three games in other to get a rating.
+    </p>
     <table class="table-auto my-3 w-full">
         <thead>
             <tr class="text-left border-b-2 border-slate-500 lg:text-xl">
@@ -14,7 +17,7 @@
             </tr>
         </thead>
         <tbody>
-            {% for player in all_players %}
+            {% for player in rated_players %}
                 <tr>
                     <td class="py-2 px-3">{{ forloop.counter }}</td>
                     <td class="py-2 px-3"><a
@@ -23,8 +26,19 @@
                     <td class="py-2 px-3">{{ player.num_games }}</td>
                 </tr>
             {% endfor %}
+            {% for player in unrated_players %}
+                <tr>
+                    <td class="py-2 px-3">--</td>
+                    <td class="py-2 px-3"><a
+                        class="underline text-sky-600" href="{% url 'player' player.name %}">{{ player.name }}</a></td>
+                    <td class="py-2 px-3">--</td>
+                    <td class="py-2 px-3">{{ player.num_games }}</td>
+                </tr>
+            {% endfor %}
         </tbody>
     </table>
+    
+
 </div>
 
 {% endblock %}

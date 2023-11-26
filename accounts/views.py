@@ -4,6 +4,7 @@ from django.http import HttpRequest, HttpResponse
 from scoreboard.decorators import require_POST_params
 from django.views.decorators.http import require_GET, require_POST
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from accounts.models import SignupKey
 from scoreboard.models import Player
@@ -86,3 +87,50 @@ def create_account(request: HttpRequest) -> HttpResponse:
     login(request, new_user)
 
     return redirect('home')
+
+
+@login_required
+@require_GET
+def overview(request: HttpRequest) -> HttpResponse:
+    user_obj = request.user
+    player_obj = Player.objects.get(user=user_obj)
+
+    context_dict = {
+        'player_name': player_obj.name,
+        'current_view': 'account'
+    }
+
+    return render(request, 'accounts/overview.html', context=context_dict)
+
+
+@login_required
+@require_POST
+@require_POST_params(['new-profile-name'])
+def update_profile_name(request: HttpRequest) -> HttpResponse:
+    user_obj = request.user
+    player_obj = Player.objects.get(user=user_obj)
+
+    player_obj.name = request.POST['new-profile-name']
+    player_obj.save()
+
+    return redirect('account-overview')
+
+
+@login_required
+@require_POST
+@require_POST_params(['old-password', 'new-password', 'repeat-new-password'])
+def update_password(request: HttpRequest) -> HttpResponse:
+    username: str = request.user.username  # type: ignore
+
+    if request.POST['new-password'] != request.POST['repeat-new-password']:
+        return render(request, 'scoreboard/bad_request.html', status=400)
+    
+    authenticated_user = authenticate(username=username, password=request.POST['old-password'])
+    if authenticated_user is None:
+        return render(request, 'scoreboard/bad_request.html', status=400)
+    
+    logout(request)
+    authenticated_user.set_password(request.POST['new-password'])
+    authenticated_user.save()
+    
+    return redirect('account-overview')
