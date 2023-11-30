@@ -1,0 +1,49 @@
+{% extends "scoreboard/base.html" %}
+
+{% block content %}
+
+<h1 class="text-3xl mb-8">Leagues</h1>
+
+<div class="flex border-2 border-slate-300 border-dashed p-4 rounded-md mb-5">
+    <div class="grow">
+        <h2 class="text-2xl mb-4">new</h2>
+        <p>
+            create a new league...
+        </p>
+    </div>
+    
+    <div>
+        <a href="{% url 'new-league-page' %}" class="block bg-red-500 text-white shadow rounded-md px-3 py-4 m-1">create</a>
+    </div>
+</div>
+
+{% for league in all_leagues %}
+    <div class="flex border-sky-700 bg-orange-100 p-4 rounded-md mb-5">
+        <div class="grow">
+            <h2 class="text-2xl mb-4">{{ league.name }}</h2>
+            <p>
+                {{ league.description }}
+            </p>
+        </div>
+        
+        <div>
+            <form action="{% url 'submit-join-request' %}" method="post">
+                {% csrf_token %}
+                <input type="submit" class="w-full bg-red-500 text-white shadow rounded-md px-3 py-4 m-1
+                    cursor-pointer" value="request to join">
+            </form>
+            <form action="{% url 'activate-league' %}" method="post">
+                {% csrf_token %}
+                <input type="submit" class="w-full bg-red-500 text-white shadow rounded-md px-3 py-4 m-1
+                    cursor-pointer" value="activate">
+            </form>
+        </div>
+    </div>
+
+{% empty %}
+
+    <p>no leagues...</p>
+
+{% endfor %}
+
+{% endblock %}

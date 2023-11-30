@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 
 
 class Player(models.Model):
-    name = models.CharField(max_length=25)
+    name = models.CharField(max_length=50, unique=True)
     current_elo = models.IntegerField(default=1000)
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
 

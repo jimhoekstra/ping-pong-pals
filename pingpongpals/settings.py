@@ -36,6 +36,7 @@ ALLOWED_HOSTS = os.environ['DJANGO_ALLOWED_HOSTS'].split(';')
 INSTALLED_APPS = [
     'scoreboard.apps.ScoreboardConfig',
     'accounts.apps.AccountsConfig',
+    'leagues.apps.LeaguesConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
