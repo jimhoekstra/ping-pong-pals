@@ -1,9 +1,11 @@
 from typing import Any
 from math import ceil
+from datetime import timedelta
 from django.shortcuts import render, redirect
 from django.http import HttpRequest, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_GET, require_POST
+from django.utils import timezone
 from scoreboard.decorators import require_POST_params
 from .models import Game, Player, PlayerScore
 from .elo import EloRating
@@ -15,6 +17,11 @@ def home(request: HttpRequest) -> HttpResponse:
     Home page view.
     '''
     context_data: dict[str, Any] = {'current_view': 'home'}
+
+    context_data['total_number_of_games'] = Game.objects.count()
+    context_data['total_number_of_players'] = Player.objects.count()
+    seven_days_ago = timezone.now() - timedelta(days=7)
+    context_data['number_of_games_in_last_seven_days'] = Game.objects.filter(date__gte=seven_days_ago).count()
     return render(request, 'scoreboard/home.html', context=context_data)
 
 

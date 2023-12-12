@@ -15,6 +15,25 @@
     <a href="https://github.com/jimhoekstra/ping-pong-pals" class="underline text-sky-600">Github page</a>.
 </p>
 
+<div class="flex flex-wrap justify-around my-10">
+    <div class="border p-10 bg-orange-100 rounded-full m-3 text-center" style="min-width: 190px;">
+        <p class="text-5xl">{{ total_number_of_games }}</p>
+        <p class="text-lg">game{% if total_number_of_games != 1 %}s{% endif %}</p>
+        <p class="text-lg">played</p>
+    </div>
+    
+    <div class="border p-10 bg-orange-100 rounded-full m-3 text-center" style="min-width: 190px;">
+        <p class="text-5xl">{{ number_of_games_in_last_seven_days }}</p>
+        <p class="text-lg">game{% if number_of_games_in_last_seven_days != 1 %}s{% endif %} in</p>
+        <p class="text-lg">last 7 days</p>
+    </div>
+
+    <div class="border p-10 bg-orange-100 rounded-full m-3 text-center" style="min-width: 190px;">
+        <p class="text-5xl">{{ total_number_of_players }}</p>
+        <p class="text-lg">player{% if total_number_of_players != 1 %}s{% endif %}</p>
+    </div>
+</div>
+
 <h2 class="text-2xl mt-8">Elo</h2>
 
 <p class="mt-5">
