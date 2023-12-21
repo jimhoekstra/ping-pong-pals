@@ -3,9 +3,9 @@
 {% block content %}
 
 <div class="flex justify-between items-start">
-    <h1 class="text-3xl">Recent Games</h1>
-    <a href="{% url 'add-game' %}" class="block py-3 px-5 bg-red-500 rounded-full text-white cursor-pointer
-        shadow shadow-red-400 text-2xl">+</a>
+    <h1 class="text-3xl">recent games</h1>
+    <a href="{% url 'add-game' %}" class="block py-4 px-6 bg-red-500 rounded-full text-white cursor-pointer
+        text-3xl">+</a>
 </div>
 
 <div class="mb-4">
@@ -36,10 +36,12 @@
         </tbody>
     </table>
 
-    {% for page in pages %}
-        <a href="{% url 'games' page %}" class="rounded-md py-3 bg-orange-200 px-4
+    <div class="my-10">
+        {% for page in pages %}
+            <a href="{% url 'games' page %}" class="rounded-md py-3 bg-orange-200 px-4
                 {% if page == current_page %} border-4 border-red-600{% endif %}">{{ page }}</a>
-    {% endfor %}
+        {% endfor %}
+    </div>
 </div>
 
 {% endblock %}

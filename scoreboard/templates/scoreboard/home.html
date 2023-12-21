@@ -10,12 +10,12 @@
         <img src="{% static 'scoreboard/PingPong.png' %}">
     </div>
     <div>
-        <h1 class="text-4xl">Ping Pong Pals</h1>
+        <h1 class="text-4xl">ping pong pals</h1>
 
-        <p class="mt-5">
+        <p class="mt-8">
             Welcome! This website is dedicated to keeping track of the outcomes of 
             friendly ping pong matches using the Elo rating system, and to encourage everyone to join the game
-            in a fun and competitive way.
+            in a fun way.
         </p>
         <p class="mt-5">
             This website is still in an early development phase, there will be bugs. The code is open source,
@@ -34,7 +34,7 @@
     </div>
     <div class="border p-10 bg-orange-100 rounded-full m-3 text-center" style="min-width: 190px;">
         <p class="text-5xl">{{ number_of_games_in_last_seven_days }}</p>
-        <p class="text-lg">game{% if number_of_games_in_last_seven_days != 1 %}s{% endif %} in</p>
+        <p class="text-lg">game{% if number_of_games_in_last_seven_days != 1 %}s{% endif %} in the</p>
         <p class="text-lg">last 7 days  </p>
     </div>
     <div class="border p-10 bg-orange-100 rounded-full m-3 text-center" style="min-width: 190px;">

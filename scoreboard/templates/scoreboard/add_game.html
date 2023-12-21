@@ -2,8 +2,8 @@
 
 {% block content %}
 
-<div class="p-4 border-2 rounded bg-orange-100 border-sky-700 border-dashed mb-6">
-    <h2 class="text-3xl">New Game</h2>
+<h1 class="text-4xl mb-8">new game</h2>
+<div class="p-4 rounded bg-orange-100 mb-6">
     <form action="{% url 'new-game' %}" method="post">
         {% csrf_token %}
         <h2 class="mt-4 text-xl">winner</h2>

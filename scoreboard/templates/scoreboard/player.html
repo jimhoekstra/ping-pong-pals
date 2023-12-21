@@ -3,7 +3,12 @@
 {% block content %}
 
 <div>
-    <h1 class="text-3xl mb-5">{{ player_name }}</h1>
+    <h1 class="text-4xl mb-2">{{ player_name }}</h1>
+    <p class="mb-8">
+        {{ player_name }} has played a grand total of {{ total_games }} game{% if total_games != 1 %}s{% endif %}.
+    </p>
+
+    <h2 class="mt-8 mb-5 text-3xl">recent games</h2>
     <table class="table-auto my-3 w-full mb-10">
         <thead>
             <tr class="text-left border-b-2 border-slate-500 lg:text-xl">

@@ -136,4 +136,5 @@ def player(request: HttpRequest, player_name: str, page: int = 1) -> HttpRespons
     context_data['player_name'] = player_obj.name
     context_data['pages'] = list(range(1, ceil(total_games_for_player / GAMES_PER_PAGE)+1))
     context_data['current_page'] = page
+    context_data['total_games'] = total_games_for_player
     return render(request, 'scoreboard/player.html', context=context_data)
