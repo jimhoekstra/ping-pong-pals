@@ -18,6 +18,7 @@ def home(request: HttpRequest) -> HttpResponse:
     '''
     context_data: dict[str, Any] = {'current_view': 'home'}
 
+    context_data['user_is_authenticated'] = request.user.is_authenticated
     context_data['total_number_of_games'] = Game.objects.count()
     context_data['total_number_of_players'] = Player.objects.count()
     seven_days_ago = timezone.now() - timedelta(days=7)

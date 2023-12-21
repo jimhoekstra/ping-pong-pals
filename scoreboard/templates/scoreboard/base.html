@@ -4,15 +4,16 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🏓 Ping Pong Pals</title>
+    <title>Ping Pong Pals</title>
 
     {% load static %}
     <link rel="stylesheet" href="{% static 'scoreboard/output.css' %}">
+    <link rel="icon" href="{% static 'scoreboard/PingPong.png' %}">
 </head>
 <body>
     {% include "scoreboard/navbar.html" %}
 
-    <div class="lg:grid lg:grid-cols-4">
+    <div class="lg:grid lg:grid-cols-4 pb-10">
         <div class="hidden lg:block"></div>
         <div class="lg:col-span-2 p-3 lg:p-0 font-mono">
             {% block content %}{% endblock %}

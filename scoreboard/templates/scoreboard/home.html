@@ -2,20 +2,49 @@
 
 {% block content %}
 
-<h1 class="text-3xl">Ping Pong Pals</h1>
 
-<p class="mt-5">
-    Welcome! This website is dedicated to keeping track of the outcomes of 
-    friendly ping pong matches using the Elo rating system, and to encourage everyone to join the game
-    in a fun and competitive way.
-</p>
-<p class="mt-5">
-    This website is still in an early development phase, there will be bugs. The code is open source,
-    licensed under the MIT license. If you would like to contribute, visit the
-    <a href="https://github.com/jimhoekstra/ping-pong-pals" class="underline text-sky-600">Github page</a>.
-</p>
 
-<h2 class="text-2xl mt-8">Elo</h2>
+<div class="grid grid-cols-1 lg:grid-cols-2">
+    <div class="hidden lg:block">
+        {% load static %}
+        <img src="{% static 'scoreboard/PingPong.png' %}">
+    </div>
+    <div>
+        <h1 class="text-4xl">Ping Pong Pals</h1>
+
+        <p class="mt-5">
+            Welcome! This website is dedicated to keeping track of the outcomes of 
+            friendly ping pong matches using the Elo rating system, and to encourage everyone to join the game
+            in a fun and competitive way.
+        </p>
+        <p class="mt-5">
+            This website is still in an early development phase, there will be bugs. The code is open source,
+            licensed under the MIT license. If you would like to contribute, visit the
+            <a href="https://github.com/jimhoekstra/ping-pong-pals" class="underline text-sky-600">Github page</a>.
+        </p>
+    </div>
+</div>
+
+{% if user_is_authenticated %}
+<div class="flex flex-wrap justify-around my-16">
+    <div class="border p-10 bg-orange-100 rounded-full m-3 text-center" style="min-width: 190px;">
+        <p class="text-5xl">{{ total_number_of_games }}</p>
+        <p class="text-lg">game{% if total_number_of_games != 1 %}s{% endif %}</p>
+        <p class="text-lg">played</p>
+    </div>
+    <div class="border p-10 bg-orange-100 rounded-full m-3 text-center" style="min-width: 190px;">
+        <p class="text-5xl">{{ number_of_games_in_last_seven_days }}</p>
+        <p class="text-lg">game{% if number_of_games_in_last_seven_days != 1 %}s{% endif %} in</p>
+        <p class="text-lg">last 7 days  </p>
+    </div>
+    <div class="border p-10 bg-orange-100 rounded-full m-3 text-center" style="min-width: 190px;">
+        <p class="text-5xl">{{ total_number_of_players }}</p>
+        <p class="text-lg">player{% if total_number_of_players != 1 %}s{% endif %}</p>
+    </div>
+</div>
+{% endif %}
+
+<h2 class="text-3xl mt-8">Elo</h2>
 
 <p class="mt-5">
     We use the Elo rating system to keep track of a player's skill relative to other players. Your score is updated
