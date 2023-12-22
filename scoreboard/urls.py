@@ -18,8 +18,8 @@ leagues_urlpatterns = [
 ]
 
 games_urlpatterns = [
-    path('games', games.page, name='games'),
-    path('games/<int:page>', games.page, name='games'),
+    path('games', games.games_page, name='games'),
+    path('games/<int:page>', games.games_page, name='games'),
     path('games/new', games.new_game_page, name='add-game'),
     path('games/submit', games.submit_new_game, name='new-game'),
 ]

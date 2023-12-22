@@ -16,9 +16,15 @@ def page(request: HttpRequest) -> HttpResponse:
     context: dict[str, Any] = {'current_view': 'leagues'}
     all_leagues = League.objects.all()
 
-    context['all_leagues'] = all_leagues
+    context['all_leagues'] = [{
+        'league': league,
+        'n_participants': league.participants.count(),
+        'n_games': league.games.count()  # type: ignore
+    } for league in all_leagues]
     context['active_user'] = request.user
     context['active_league'] = ApplicationState.get_active_league(request=request)
+
+    print(context['all_leagues'])
 
     return render(request, 'scoreboard/leagues.html', context=context)
 

@@ -1,31 +1,42 @@
 from typing import Any
 from math import ceil
+
 from django.shortcuts import render, redirect
 from django.http import HttpRequest, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_GET, require_POST
+
 from scoreboard.decorators import require_POST_params
 from scoreboard.models import Game, Player
 from scoreboard.elo import EloRating
+from scoreboard.state import ApplicationState
 
 
 @login_required
 @require_GET
-def page(request: HttpRequest, page: int = 1) -> HttpResponse:
+def games_page(request: HttpRequest, page: int = 1) -> HttpResponse:
     '''
     View of the most recent 20 games that have been played.
     The page also includes a form for submitting a new game.
     '''
-    GAMES_PER_PAGE: int = 10
-    total_number_of_games = Game.objects.count()
+    active_league = ApplicationState.get_active_league(request=request)
+    if active_league is None:
+        return redirect('leagues')
 
-    if page > ceil(total_number_of_games / GAMES_PER_PAGE):
+    GAMES_PER_PAGE: int = 10
+    total_number_of_games = Game.objects.filter(league=active_league).count()
+
+    if page > ceil(total_number_of_games / GAMES_PER_PAGE) and total_number_of_games != 0:
         return redirect('games')
 
     context: dict[str, Any] = {'current_view': 'games'}
-    context['all_games'] = Game.objects.all().order_by('-date')[(page-1)*GAMES_PER_PAGE:(page)*GAMES_PER_PAGE]
+    context['all_games'] = Game.objects.filter(
+        league=active_league).order_by('-date')[(page-1)*GAMES_PER_PAGE:(page)*GAMES_PER_PAGE]
+    
     context['pages'] = list(range(1, ceil(total_number_of_games / GAMES_PER_PAGE)+1))
     context['current_page'] = page
+    context['total_number_of_games'] = total_number_of_games
+    context['active_league'] = active_league
     return render(request, 'scoreboard/games.html', context=context)
 
 

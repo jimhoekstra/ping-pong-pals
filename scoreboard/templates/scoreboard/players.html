@@ -3,11 +3,14 @@
 {% block content %}
 
 <div>
-    <h1 class="text-4xl mb-3">leaderboard</h1>
-    <p class="mb-10">
-        Note: you need to play at least three games in other to get a rating.
-    </p>
-    <table class="table-auto my-5 w-full">
+    <div class="flex justify-between items-start">
+        <div class="mb-5">
+            <h1 class="text-4xl">leaderboard</h1>
+            <p class="my-3 text-xl">league: {{ active_league.name }}</p>
+        </div>
+    </div>
+
+    <table class="table-auto mt-5 mb-10 w-full">
         <thead class="bg-blue-200">
             <tr class="text-left border-b-2 border-slate-500 lg:text-xl">
                 <th class="p-3">#</th>
@@ -37,6 +40,10 @@
             {% endfor %}
         </tbody>
     </table>
+
+    <p>
+        note: you need to play at least three games in other to get a rating.
+    </p>
     
 
 </div>

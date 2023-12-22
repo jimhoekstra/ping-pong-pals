@@ -1,10 +1,13 @@
 from typing import Any
 from math import ceil
-from django.shortcuts import render
+
+from django.shortcuts import render, redirect
 from django.http import HttpRequest, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_GET
+
 from scoreboard.models import Player, Rating
+from scoreboard.state import ApplicationState
 
 
 @login_required
@@ -14,8 +17,12 @@ def page(request: HttpRequest) -> HttpResponse:
     View of all the players, ordered by descending Elo rating, also showing
     the number of games that a player has logged.
     '''
+    active_league = ApplicationState.get_active_league(request=request)
+    if active_league is None:
+        return redirect('leagues')
+
     context: dict[str, Any] = {'current_view': 'players'}
-    all_players = Player.objects.all().order_by('-current_elo')
+    all_players = active_league.participants.all().order_by('-current_elo')
 
     all_players = [{
         'name': player.name,
@@ -27,6 +34,7 @@ def page(request: HttpRequest) -> HttpResponse:
     unrated_players = [_player for _player in all_players if _player['num_games'] < 3]
     context['rated_players'] = rated_players
     context['unrated_players'] = unrated_players
+    context['active_league'] = active_league
     
     return render(request, 'scoreboard/players.html', context=context)
 

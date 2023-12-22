@@ -3,38 +3,45 @@
 {% block content %}
 
 <div class="flex justify-between items-start">
-    <h1 class="text-4xl">recent games</h1>
+    <div class="mb-5">
+        <h1 class="text-4xl">recent games</h1>
+        <p class="my-3 text-xl">league: {{ active_league.name }}</p>
+    </div>
     <a href="{% url 'add-game' %}" class="block py-4 px-6 bg-red-500 rounded-full text-white cursor-pointer
         text-3xl">+</a>
 </div>
 
 <div class="mb-4">
-    <table class="table-auto my-5 w-full mb-10">
-        <thead class="bg-blue-200">
-            <tr class="text-left border-b-2 border-slate-500 lg:text-xl">
-                <th class="p-3 hidden lg:block">date & time</th>
-                <th class="p-3">winner</th>
-                <th class="p-3">loser</th>
-                <th class="p-3">score</th>
-            </tr>
-        </thead>
-        <tbody class="text-sm lg:text-base">
-            {% for game in all_games %}
-                <tr>
-                    <td class="px-3 py-2 hidden lg:block">{{ game.date|date:"D M jS - H:i" }}</td>
-                    <td class="px-3 py-2">
-                        <a href="{% url 'player' game.winner.name %}" class="underline text-sky-600">
-                        {{ game.winner.name }}</a>
-                    </td>
-                    <td class="px-3 py-2">
-                        <a href="{% url 'player' game.loser.name %}" class="underline text-sky-600">
-                        {{ game.loser.name }}</a>
-                    </td>
-                    <td class="px-3 py-2">{{ game.winner_points }}-{{ game.loser_points }}</td>
+    {% if total_number_of_games == 0 %}
+        <p>there seem to be no games yet in this league</p>
+    {% else %}
+        <table class="table-auto my-5 w-full mb-10">
+            <thead class="bg-blue-200">
+                <tr class="text-left border-b-2 border-slate-500 lg:text-xl">
+                    <th class="p-3 hidden lg:block">date & time</th>
+                    <th class="p-3">winner</th>
+                    <th class="p-3">loser</th>
+                    <th class="p-3">score</th>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody class="text-sm lg:text-base">
+                {% for game in all_games %}
+                    <tr>
+                        <td class="px-3 py-2 hidden lg:block">{{ game.date|date:"D M jS - H:i" }}</td>
+                        <td class="px-3 py-2">
+                            <a href="{% url 'player' game.winner.name %}" class="underline text-sky-600">
+                            {{ game.winner.name }}</a>
+                        </td>
+                        <td class="px-3 py-2">
+                            <a href="{% url 'player' game.loser.name %}" class="underline text-sky-600">
+                            {{ game.loser.name }}</a>
+                        </td>
+                        <td class="px-3 py-2">{{ game.winner_points }}-{{ game.loser_points }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
 
     <div class="my-10">
         {% for page in pages %}
