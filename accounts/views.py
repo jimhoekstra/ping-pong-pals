@@ -26,6 +26,15 @@ def login_page(request: HttpRequest) -> HttpResponse:
     return render(request, 'accounts/login.html', context=context_data)
 
 
+@require_GET
+def new_account_page(request: HttpRequest) -> HttpResponse:
+    '''
+    View of the new account page.
+    '''
+    context_data: dict[str, Any] = {'current_view': 'login'}    
+    return render(request, 'accounts/new_account.html', context=context_data)
+
+
 @require_POST
 @require_POST_params(['username', 'password'])
 def login_user(request: HttpRequest) -> HttpResponse:

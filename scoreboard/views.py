@@ -133,7 +133,7 @@ def player(request: HttpRequest, player_name: str, page: int = 1) -> HttpRespons
         (page-1)*GAMES_PER_PAGE:page*GAMES_PER_PAGE]
     
     context_data['player_scores'] = player_scores
-    context_data['player_name'] = player_obj.name
+    context_data['player_obj'] = player_obj
     context_data['pages'] = list(range(1, ceil(total_games_for_player / GAMES_PER_PAGE)+1))
     context_data['current_page'] = page
     context_data['total_games'] = total_games_for_player

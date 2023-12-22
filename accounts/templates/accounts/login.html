@@ -8,40 +8,24 @@
 
 {% endif %}
 
-<div class="p-4 border-2 rounded bg-orange-100 border-sky-700 border-dashed mb-6">
-    <h2 class="text-3xl mb-5">Log in</h2>
+<div class="p-4 rounded bg-blue-100 mb-6">
+    <h2 class="text-4xl mb-5">log in</h2>
     <form action="{% url 'login-user' %}" method="post">
         {% csrf_token %}
         <input type="text" name="username" placeholder="username" class="w-full p-3 outline-offset-0 rounded my-2 
-            outline-none focus:outline-4 focus:outline-orange-500">
+            outline-none focus:outline-4 focus:outline-blue-600">
         <input type="password" name="password" placeholder="password" class="w-full p-3 outline-offset-0 rounded my-2
-            outline-none focus:outline-4 focus:outline-orange-500">
+            outline-none focus:outline-4 focus:outline-blue-600">
         {% if next_page %}
         <input type="hidden" name="next-page" value="{{ next_page }}">
         {% endif %}
-        <input type="submit" value="Submit" class="p-3 w-full bg-red-500 rounded text-white my-2 cursor-pointer
-            shadow shadow-red-400">
+        <input type="submit" value="submit" class="p-3 w-full bg-red-500 rounded text-white my-2 cursor-pointer
+            ">
     </form>
-</div>
 
-<div class="p-4 border-2 rounded bg-orange-100 border-sky-700 border-dashed mb-6">
-    <h2 class="text-3xl mb-5">Or, create a new account</h2>
-    <p class="mb-3">
-        To create an account, you need a signup key. Please ask an administrator for a signup key.
+    <p class="my-6">
+        <a href="{% url 'new-account-page' %}" class="underline text-sky-600">or, create a new account.</a>
     </p>
-    <form action="{% url 'create-account' %}" method="post">
-        {% csrf_token %}
-        <input type="text" name="username" placeholder="username" class="w-full p-3 outline-offset-0 rounded my-2 
-            outline-none focus:outline-4 focus:outline-orange-500">
-        <input type="password" name="password" placeholder="password" class="w-full p-3 outline-offset-0 rounded my-2
-            outline-none focus:outline-4 focus:outline-orange-500">
-        <input type="password" name="repeat-password" placeholder="repeat password" class="w-full p-3 outline-offset-0 rounded my-2
-            outline-none focus:outline-4 focus:outline-orange-500">
-        <input type="text" name="signup-key" placeholder="signup key" class="w-full p-3 outline-offset-0 rounded my-2 
-            outline-none focus:outline-4 focus:outline-orange-500">
-        <input type="submit" value="Submit" class="p-3 w-full bg-red-500 rounded text-white my-2 cursor-pointer
-            shadow shadow-red-400">
-    </form>
 </div>
 
 {% endblock %}
