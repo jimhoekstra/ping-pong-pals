@@ -22,6 +22,8 @@ def login_page(request: HttpRequest) -> HttpResponse:
             context_data['next_page'] = 'games'
         elif request.GET['next'] == '/players':
             context_data['next_page'] = 'players'
+        elif request.GET['next'] == '/leagues':
+            context_data['next_page'] = 'leagues'
     
     return render(request, 'accounts/login.html', context=context_data)
 

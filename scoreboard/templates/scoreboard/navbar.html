@@ -2,6 +2,8 @@
         text-white lg:text-xl justify-center font-bold">
     <a href="{% url 'home' %}" class="mx-2 lg:mx-6
         {% if current_view == 'home' %} underline underline-offset-8 decoration-4{% endif %}">🏡 home</a>
+    <a href="{% url 'leagues' %}" class="mx-2 lg:mx-6
+        {% if current_view == 'leagues' %} underline underline-offset-8 decoration-4{% endif %}">🏁 leagues</a>
     <a href="{% url 'games' %}" class="mx-2 lg:mx-6
         {% if current_view == 'games' %} underline underline-offset-8 decoration-4{% endif %}">🏓 games</a>
     <a href="{% url 'players' %}" class="mx-2 lg:mx-6

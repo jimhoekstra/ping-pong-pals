@@ -1,4 +1,4 @@
-from .models import Player, Game, PlayerScore
+from .models import Player, Game, Rating
 
 
 class EloRating:
@@ -36,17 +36,17 @@ class EloRating:
         self.loser.current_elo = self.new_loser_rating
         self.loser.save()
         
-        new_winner_player_score = PlayerScore(
+        new_winner_player_score = Rating(
             player=self.winner,
-            score=self.new_winner_rating,
-            after_game=game
+            rating=self.new_winner_rating,
+            result_of_game=game
         )
         new_winner_player_score.save()
 
-        new_loser_player_score = PlayerScore(
+        new_loser_player_score = Rating(
             player=self.loser,
-            score=self.new_loser_rating,
-            after_game=game
+            rating=self.new_loser_rating,
+            result_of_game=game
         )
         new_loser_player_score.save()
 

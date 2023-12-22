@@ -1,0 +1,18 @@
+{% extends "scoreboard/base.html" %}
+
+{% block content %}
+
+<h1 class="text-4xl mb-8">new league</h2>
+<div class="p-4 rounded bg-blue-100">
+    <form action="{% url 'submit-new-league' %}" method="post">
+        {% csrf_token %}
+        <input type="text" name="league-name" placeholder="name" class="w-full p-3 outline-offset-0 rounded my-2 
+        outline-none focus:outline-4 focus:outline-blue-600" required>
+        <textarea name="league-description" placeholder="description (optional)" class="w-full p-3 outline-offset-0 rounded my-2 
+        outline-none focus:outline-4 focus:outline-blue-600"></textarea>
+        <input type="submit" value="Submit" class="p-3 w-full bg-red-500 rounded text-white cursor-pointer my-2
+            ">
+    </form>
+</div>
+
+{% endblock %}
