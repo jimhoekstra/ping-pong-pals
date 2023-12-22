@@ -29,7 +29,11 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', default=secrets.token_hex(32))
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DJANGO_DEBUG', default='false') == 'true'
 
-ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', default='').split(';')
+allowed_hosts = os.getenv('DJANGO_ALLOWED_HOSTS', default=None)
+if allowed_hosts is None:
+    ALLOWED_HOSTS = []
+else:
+    ALLOWED_HOSTS = allowed_hosts.split(';')
 
 
 # Application definition
