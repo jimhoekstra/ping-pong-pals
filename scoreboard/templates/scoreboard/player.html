@@ -4,13 +4,13 @@
 
 <div>
     <h1 class="text-4xl mb-2">{{ player_name }}</h1>
-    <p class="mb-8">
+    <p class="my-8">
         {{ player_name }} has played a grand total of {{ total_games }} game{% if total_games != 1 %}s{% endif %}.
     </p>
 
     <h2 class="mt-8 mb-5 text-3xl">recent games</h2>
     <table class="table-auto my-3 w-full mb-10">
-        <thead>
+        <thead class="bg-blue-200">
             <tr class="text-left border-b-2 border-slate-500 lg:text-xl">
                 <th class="p-3 hidden lg:block">date & time</th>
                 <th class="p-3">game</th>
@@ -40,8 +40,8 @@
     </table>
 
     {% for page in pages %}
-        <a href="{% url 'player' player_name page %}" class="rounded-md py-3 px-4 bg-orange-200
-                {% if page == current_page %} border-4 border-red-600{% endif %}">{{ page }}</a>
+        <a href="{% url 'player' player_name page %}" class="rounded-md py-3 px-4 bg-orange-100
+                {% if page == current_page %} border-4 border-blue-600{% endif %}">{{ page }}</a>
     {% endfor %}
 </div>
 

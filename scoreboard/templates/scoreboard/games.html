@@ -3,14 +3,14 @@
 {% block content %}
 
 <div class="flex justify-between items-start">
-    <h1 class="text-3xl">recent games</h1>
+    <h1 class="text-4xl">recent games</h1>
     <a href="{% url 'add-game' %}" class="block py-4 px-6 bg-red-500 rounded-full text-white cursor-pointer
         text-3xl">+</a>
 </div>
 
 <div class="mb-4">
-    <table class="table-auto my-3 w-full mb-10">
-        <thead>
+    <table class="table-auto my-5 w-full mb-10">
+        <thead class="bg-blue-200">
             <tr class="text-left border-b-2 border-slate-500 lg:text-xl">
                 <th class="p-3 hidden lg:block">date & time</th>
                 <th class="p-3">winner</th>
@@ -38,8 +38,8 @@
 
     <div class="my-10">
         {% for page in pages %}
-            <a href="{% url 'games' page %}" class="rounded-md py-3 bg-orange-200 px-4
-                {% if page == current_page %} border-4 border-red-600{% endif %}">{{ page }}</a>
+            <a href="{% url 'games' page %}" class="rounded-md py-3 bg-orange-100 px-4
+                {% if page == current_page %} border-4 border-blue-600{% endif %}">{{ page }}</a>
         {% endfor %}
     </div>
 </div>

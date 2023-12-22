@@ -9,16 +9,22 @@
     {% load static %}
     <link rel="stylesheet" href="{% static 'scoreboard/output.css' %}">
     <link rel="icon" href="{% static 'scoreboard/PingPong.png' %}">
+
+
 </head>
 <body>
-    {% include "scoreboard/navbar.html" %}
-
-    <div class="lg:grid lg:grid-cols-4 pb-10">
-        <div class="hidden lg:block"></div>
-        <div class="lg:col-span-2 p-3 lg:p-0 font-mono">
-            {% block content %}{% endblock %}
+    <div class="min-h-screen flex flex-col">   
+        {% include "scoreboard/navbar.html" %}
+        <div class="grow lg:grid lg:grid-cols-4">
+            <div class="hidden lg:block"></div>
+            <div class="lg:col-span-2 p-3 lg:p-0 font-mono">
+                {% block content %}{% endblock %}
+            </div>
+            <div class="hidden lg:block"></div>
         </div>
-        <div class="hidden lg:block"></div>
+        <div>
+            {% include "scoreboard/footer.html" %}
+        </div>
     </div>
 </body>
 </html>

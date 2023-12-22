@@ -4,13 +4,13 @@
 
 
 
-<div class="grid grid-cols-1 lg:grid-cols-2">
+<div class="grid grid-cols-1 lg:grid-cols-2 mt-8">
     <div class="hidden lg:block">
         {% load static %}
         <img src="{% static 'scoreboard/PingPong.png' %}">
     </div>
     <div>
-        <h1 class="text-4xl">ping pong pals</h1>
+        <h1 class="text-5xl mb-10">ping pong pals</h1>
 
         <p class="mt-8">
             Welcome! This website is dedicated to keeping track of the outcomes of 
@@ -27,17 +27,17 @@
 
 {% if user_is_authenticated %}
 <div class="flex flex-wrap justify-around my-16">
-    <div class="border p-10 bg-orange-100 rounded-full m-3 text-center" style="min-width: 190px;">
+    <div class="border p-10 bg-blue-200 rounded-full m-3 text-center" style="min-width: 190px;">
         <p class="text-5xl">{{ total_number_of_games }}</p>
         <p class="text-lg">game{% if total_number_of_games != 1 %}s{% endif %}</p>
         <p class="text-lg">played</p>
     </div>
-    <div class="border p-10 bg-orange-100 rounded-full m-3 text-center" style="min-width: 190px;">
+    <div class="border p-10 bg-blue-200 rounded-full m-3 text-center" style="min-width: 190px;">
         <p class="text-5xl">{{ number_of_games_in_last_seven_days }}</p>
         <p class="text-lg">game{% if number_of_games_in_last_seven_days != 1 %}s{% endif %} in the</p>
         <p class="text-lg">last 7 days  </p>
     </div>
-    <div class="border p-10 bg-orange-100 rounded-full m-3 text-center" style="min-width: 190px;">
+    <div class="border p-10 bg-blue-200 rounded-full m-3 text-center" style="min-width: 190px;">
         <p class="text-5xl">{{ total_number_of_players }}</p>
         <p class="text-lg">player{% if total_number_of_players != 1 %}s{% endif %}</p>
     </div>
