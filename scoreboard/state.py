@@ -20,3 +20,8 @@ class ApplicationState:
                 return None
         else:
             return None
+
+    @classmethod
+    def remove_active_league(cls, request: HttpRequest):
+        if cls.ACTIVE_LEAGUE_KEY in request.session:
+            del request.session[cls.ACTIVE_LEAGUE_KEY]

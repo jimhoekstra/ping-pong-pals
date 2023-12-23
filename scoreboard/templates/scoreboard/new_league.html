@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<h1 class="text-4xl mb-8">new league</h2>
+<h1 class="text-4xl mb-8 text-red-900">New League</h2>
 <div class="p-4 rounded bg-blue-100">
     <form action="{% url 'submit-new-league' %}" method="post">
         {% csrf_token %}

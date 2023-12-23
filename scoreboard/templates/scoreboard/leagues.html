@@ -3,42 +3,80 @@
 {% block content %}
 
 <div class="flex justify-between items-start mb-5">
-    <h1 class="text-4xl">leagues</h1>
-    <a href="{% url 'new-league-page' %}" class="block py-4 px-6 bg-red-500 rounded-full text-white cursor-pointer
-        text-3xl">+</a>
+    <div>
+        <h1 class="text-4xl text-red-900">{{ page_title }}</h1>
+        {% if current_view != 'leagues' %}
+            <p class="my-3">Choose a league to continue</p>
+        {% endif %}
+    </div>
+    {% if current_view == 'leagues' %}
+        <a href="{% url 'new-league-page' %}" class="block py-4 px-6 bg-red-500 rounded-full text-white cursor-pointer
+            text-3xl">+</a>
+    {% endif %}
 </div>
 
 <div>
 
-    {% for league in all_leagues %}
-        <div class="mb-5 rounded bg-blue-100 p-3">
+    {% for league_info in all_leagues %}
+        <div class="mb-5 rounded bg-blue-100 p-5">
 
-            <h2 class="text-3xl mb-3 font-bold">{{ league.name }}</h2>
-            <p class="p-5 border border-slate-400 rounded bg-slate-100 border-dashed">
-                {% if league.description == '' %}
+            <h2 class="text-3xl">
+                <a href="{% url next_page_url_name league_info.league.slug %}" class="text-sky-600 underline">
+                    {{ league_info.league.name }}
+                </a>
+            </h2>
+
+            <p class="p-5 border my-5 border-slate-400 rounded bg-slate-100 border-dashed">
+                {% if league_info.league.description == '' %}
                     <span class="text-slate-700">[no description]</span>
                 {% else %}
-                    {{ league.description }}
+                    {{ league_info.league.description }}
                 {% endif %}
             </p>
+
+            <table class="my-5">
+                <tbody>
+                    <tr>
+                        <td class="px-3">number of players:</td>
+                        <td class="px-3">{{ league_info.n_participants }}</td>
+                    </tr>
+                    <tr>
+                        <td class="px-3">number of games:</td>
+                        <td class="px-3">{{ league_info.n_games }}</td>
+                    </tr>
+                </tbody>
+            </table>
             
-            <div class="flex mt-5">
-                {% if league == active_league %}
-                    <div class="select-none px-4 py-3 rounded bg-blue-300 my-3 mr-2">
-                        active
-                    </div>
+            <div class="flex">
+                {% if league_info.is_member %}
+                    <p class="px-4 py-3 rounded bg-blue-700 text-white mr-2 select-none">
+                        you're a member
+                    </p>
                 {% else %}
-                    <form action="{% url 'activate-league' %}" method="post">
-                        {% csrf_token %}
-                        <input type="hidden" name="activate-league-id" value="{{ league.pk }}">
-                        <input type="submit" value="activate" class="px-4 py-3 rounded bg-red-500 text-white my-3 mr-2
-                            cursor-pointer">
-                    </form>
+                    <a href="/" class="block px-4 py-3 rounded bg-red-500 text-white mr-2">request to join</a>
                 {% endif %}
 
-                <a href="/" class="block px-4 py-3 rounded bg-red-500 text-white my-3 mr-2">request to join</a>
-                {% if league.owner == active_user.player %}
-                    <a href="/" class="block px-4 py-3 rounded bg-red-500 text-white my-3 mr-2">manage</a>
+                {% if league_info.is_member %}
+                    {% if league_info.league == current_league %}    
+                        <form action="{% url 'deactivate-league' %}" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="next-page-name" value="{{ current_view }}">
+                            <input type="submit" value="unset as default" class="px-4 py-3 rounded bg-blue-700 text-white mr-2
+                                cursor-pointer">
+                        </form>
+                    {% else %}
+                        <form action="{% url 'activate-league' %}" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="activate-league-id" value="{{ league_info.league.pk }}">
+                            <input type="hidden" name="next-page-name" value="{{ current_view }}">
+                            <input type="submit" value="set as default" class="px-4 py-3 rounded bg-red-500 text-white mr-2
+                                cursor-pointer">
+                        </form>
+                    {% endif %}
+                {% endif %}
+
+                {% if league_info.league.owner == logged_in_player %}
+                    <a href="/" class="block px-4 py-3 rounded bg-red-500 text-white mr-2">manage</a>
                 {% endif %}
             </div>
         </div>

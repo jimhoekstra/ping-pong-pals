@@ -2,21 +2,18 @@
 
 {% block content %}
 
-<div class="grid grid-cols-1 lg:grid-cols-2 mt-8">
+<div class="grid grid-cols-1 lg:grid-cols-2 mt-8 justify-items-center">
     {% load static %}
     <img src="{% static 'scoreboard/PingPong.png' %}" class="hidden lg:block self-center">
     <div>
-        <h1 class="text-5xl mb-10">ping pong pals</h1>
+        <h1 class="text-5xl mb-10 text-red-900">Ping Pong Pals</h1>
 
-        <p class="mt-8">
-            Welcome! This website is dedicated to keeping track of the outcomes of 
-            friendly ping pong matches using the Elo rating system, and to encourage everyone to join the game
-            in a fun way.
+        <p class="mt-8 text-lg">
+            Welcome to ping pong pals! Enjoy your daily serve of friendly competition.
         </p>
-        <p class="mt-5">
-            This website is still in an early development phase, there will be bugs. The code is open source,
-            licensed under the MIT license. If you would like to contribute, visit the
-            <a href="https://github.com/jimhoekstra/ping-pong-pals" class="underline text-sky-600">Github page</a>.
+        <p class="mt-5 text-lg">
+            This website is a free and open source project for encouraging friendly competition between ping pong
+            players of all levels.
         </p>
     </div>
 </div>
@@ -36,17 +33,39 @@
     <div class="border p-10 bg-blue-200 rounded-full m-3 text-center" style="min-width: 190px;">
         <p class="text-5xl text-red-900">{{ total_number_of_players }}</p>
         <p class="text-lg text-slate-700">player{% if total_number_of_players != 1 %}s{% endif %}</p>
+        <p class="text-lg text-slate-700">registered</p>
     </div>
 </div>
+{% else %}
+<div class="flex flex-wrap justify-around my-16">
+    <div class="border p-10 bg-blue-200 rounded-full m-3 text-center" style="min-width: 190px;">
+        <p class="text-5xl text-red-900">>100</p>
+        <p class="text-lg text-slate-700">game{% if total_number_of_games != 1 %}s{% endif %}</p>
+        <p class="text-lg text-slate-700">played</p>
+    </div>
+    <div class="border p-10 bg-blue-200 rounded-full m-3 text-center" style="min-width: 190px;">
+        <p class="text-5xl text-red-900">>10</p>
+        <p class="text-lg text-slate-700">player{% if total_number_of_players != 1 %}s{% endif %}</p>
+        <p class="text-lg text-slate-700">registered</p>
+    </div>
+</div>
+
 {% endif %}
 
-<h2 class="text-3xl mt-8">elo</h2>
+<h2 class="text-4xl mt-8 mb-12 text-red-900">Why use ping pong pals</h2>
 
-<p class="mt-5">
-    We use the Elo rating system to keep track of a player's skill relative to other players. Your score is updated
-    after every game you play, based on how much the game outcome deviates from the expected outcome.
-    To learn more about the Elo rating system, visit the 
-    <a href="https://en.wikipedia.org/wiki/Elo_rating_system" class="underline text-sky-600">Wikipedia page</a>.
+<p class="text-lg mt-8">
+    🏅 What's the score? Who's the champion? Never again lose yourself in these endless discussions.
+    Instead, look at the data and find out the truth.
+</p>
+
+<p class="text-lg mt-8">
+    🚀 Track your progress and see how you get better. Learn from your experiences
+    and set new goals.
+</p>
+
+<p class="text-lg mt-8 mb-16">
+    🙌 Share your results and celebrate successes together!
 </p>
 
 {% endblock %}
