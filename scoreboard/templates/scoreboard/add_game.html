@@ -4,7 +4,7 @@
 
 <h1 class="text-4xl mb-8">new game</h2>
 <div class="p-4 rounded bg-blue-100">
-    <form action="{% url 'new-game' %}" method="post">
+    <form action="{% url 'new-game' current_league.slug %}" method="post">
         {% csrf_token %}
         <h2 class="mt-4 text-xl">winner</h2>
         <select name="winner" class="w-full bg-white rounded p-3 my-2">
