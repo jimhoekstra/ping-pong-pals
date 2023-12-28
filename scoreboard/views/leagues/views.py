@@ -21,7 +21,7 @@ def page(request: HttpRequest) -> HttpResponse:
                 .add_all_leagues_info()
                 .as_context_dict())
 
-    return render(request, 'scoreboard/leagues.html', context=context)
+    return render(request, 'scoreboard/leagues/page.html', context=context)
 
 
 @login_required
@@ -71,7 +71,7 @@ def deactivate_league(request: HttpRequest) -> HttpResponse:
 @require_GET
 def new_league_page(request: HttpRequest) -> HttpResponse:
     context = LeagueContext(request=request).as_context_dict()
-    return render(request, 'scoreboard/new_league.html', context=context)
+    return render(request, 'scoreboard/leagues/new_league.html', context=context)
 
 
 @login_required

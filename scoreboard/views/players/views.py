@@ -27,7 +27,7 @@ def select_league_page(request: HttpRequest) -> HttpResponse:
                 .add_all_leagues_info()
                 .as_context_dict())
 
-    return render(request, 'scoreboard/leagues.html', context=context)
+    return render(request, 'scoreboard/leagues/page.html', context=context)
 
 
 @login_required
@@ -44,7 +44,7 @@ def page(request: HttpRequest, league: str) -> HttpResponse:
                                .add_all_players()
                                .as_context_dict())
     
-    return render(request, 'scoreboard/players.html', context=context)
+    return render(request, 'scoreboard/players/page.html', context=context)
 
 
 @login_required
@@ -67,4 +67,4 @@ def single_player_page(request: HttpRequest, league: str, player_name: str, page
                                .add_single_player_info(player=player_obj, page=page, games_per_page=GAMES_PER_PAGE)
                                .as_context_dict())
     
-    return render(request, 'scoreboard/player.html', context=context)
+    return render(request, 'scoreboard/players/player.html', context=context)

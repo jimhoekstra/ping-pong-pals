@@ -1,0 +1,27 @@
+<nav class="font-mono py-3 mb-12 border-b-4 border-gray-900 bg-red-500 
+        text-white md:text-xl font-bold">
+    <div class="grow lg:grid lg:grid-cols-4">
+        <div class="hidden lg:block"></div>
+        <div class="lg:col-span-2">
+            <div class="p-3 lg:p-0 font-mono flex justify-between text-center mx-auto" style="max-width: 800px">
+            
+                <a href="{% url 'home' %}" class="px-4 py-4 rounded-full
+                    {% if current_view == 'home' %} bg-blue-300 text-black{% endif %}">🏡 home</a>
+                <a href="{% url 'players' %}" class="px-4 py-4 rounded-full
+                    {% if current_view == 'players' %} bg-blue-300 text-black{% endif %}">🤼 players</a>
+                <a href="{% url 'games' %}" class="px-4 py-4 rounded-full
+                    {% if current_view == 'games' %} bg-blue-300 text-black{% endif %}">🏓 games</a>
+                <a href="{% url 'leagues' %}" class="px-4 py-4 rounded-full
+                    {% if current_view == 'leagues' %} bg-blue-300 text-black{% endif %}">🏁 leagues</a>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'account-overview' %}" class="px-4 py-4 rounded-full
+                        {% if current_view == 'account' %} bg-blue-300 text-black{% endif %}">🤗 account</a>
+                {% else %}
+                    <a href="{% url 'login-page' %}" class="px-4 py-4 rounded-full
+                        {% if current_view == 'login' %} bg-blue-300 text-black{% endif %}">📝 login</a>
+                {% endif %}
+            </div>
+        </div>
+        <div class="hidden lg:block"></div>
+    </div>
+</nav>

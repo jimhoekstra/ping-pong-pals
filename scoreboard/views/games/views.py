@@ -30,7 +30,7 @@ def select_league_page(request: HttpRequest) -> HttpResponse:
                 .add_all_leagues_info()
                 .as_context_dict())
 
-    return render(request, 'scoreboard/leagues.html', context=context)
+    return render(request, 'scoreboard/leagues/page.html', context=context)
 
 
 @login_required
@@ -52,7 +52,7 @@ def games_page(request: HttpRequest, league: str, page: int = 1) -> HttpResponse
                                 .add_games_for_page(page=page, games_per_page=GAMES_PER_PAGE)
                                 .as_context_dict())
     
-    return render(request, 'scoreboard/games.html', context=context)
+    return render(request, 'scoreboard/games/page.html', context=context)
 
 
 @login_required
@@ -68,7 +68,7 @@ def new_game_page(request: HttpRequest, league: str) -> HttpResponse:
                                 .add_all_players()
                                 .as_context_dict())
 
-    return render(request, 'scoreboard/add_game.html', context=context)
+    return render(request, 'scoreboard/games/add_game.html', context=context)
 
 
 @login_required
@@ -86,7 +86,7 @@ def submit_new_game(request: HttpRequest, league: str) -> HttpResponse:
         winner_points = int(request.POST['winner-points'])
         loser_points = int(request.POST['loser-points'])
     except ValueError:
-        return render(request, 'scoreboard/bad_request.html', status=400)
+        return render(request, 'scoreboard/generic/bad_request.html', status=400)
 
     if winner_id == loser_id:
         return redirect('games')

@@ -4,6 +4,13 @@ from scoreboard.views.context import LeagueDependentContext
 from scoreboard.models import Rating, Player
 
 
+def calculate_win_percentage(n_won_games, total_n_games):
+    if total_n_games == 0:
+        return '--'
+    else:
+        return str(round(n_won_games / total_n_games * 100)) + '%'
+
+
 class PlayersContext(LeagueDependentContext):
 
     CURRENT_VIEW = 'players'
@@ -15,6 +22,7 @@ class PlayersContext(LeagueDependentContext):
         all_players = [{
             'name': player.name,
             'current_elo': player.current_elo,
+            'win_percentage': calculate_win_percentage(len(player.won_games.all()), len(player.won_games.all()) + len(player.lost_games.all())),
             'num_games': len(player.won_games.all()) + len(player.lost_games.all())  # type: ignore
         } for player in all_players]
 

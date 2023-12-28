@@ -47,7 +47,7 @@ def login_user(request: HttpRequest) -> HttpResponse:
     user = authenticate(request, username=request.POST['username'], password=request.POST['password'])
 
     if user is None:
-        return render(request, 'scoreboard/bad_request.html', status=400)
+        return render(request, 'scoreboard/generic/bad_request.html', status=400)
     
     login(request, user)
 
@@ -80,10 +80,10 @@ def create_account(request: HttpRequest) -> HttpResponse:
     try:
         signup_key = SignupKey.objects.get(code=request.POST['signup-key'])
     except SignupKey.DoesNotExist:
-        return render(request, 'scoreboard/bad_request.html', status=400)
+        return render(request, 'scoreboard/generic/bad_request.html', status=400)
     
     if request.POST['password'] != request.POST['repeat-password']:
-        return render(request, 'scoreboard/bad_request.html', status=400)
+        return render(request, 'scoreboard/generic/bad_request.html', status=400)
     
     new_user = User.objects.create_user(username=request.POST['username'], password=request.POST['password'])
     new_user.save()

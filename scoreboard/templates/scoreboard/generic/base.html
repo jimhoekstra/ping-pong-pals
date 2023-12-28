@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+    
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -9,22 +10,26 @@
     {% load static %}
     <link rel="stylesheet" href="{% static 'scoreboard/output.css' %}">
     <link rel="icon" href="{% static 'scoreboard/PingPong.png' %}">
-
-
 </head>
+
 <body>
     <div class="min-h-screen flex flex-col">   
-        {% include "scoreboard/navbar.html" %}
+        {% include "scoreboard/generic/navbar.html" %}
         <div class="grow lg:grid lg:grid-cols-4">
-            <div class="hidden lg:block"></div>
+            <div class="hidden lg:block">
+                
+            </div>
             <div class="lg:col-span-2 p-3 lg:p-0 font-mono">
-                {% block content %}{% endblock %}
+                <div class="mx-auto" style="max-width: 800px;">
+                    {% block content %}{% endblock %}
+                </div>
             </div>
             <div class="hidden lg:block"></div>
         </div>
         <div>
-            {% include "scoreboard/footer.html" %}
+            {% include "scoreboard/generic/footer.html" %}
         </div>
     </div>
 </body>
+
 </html>

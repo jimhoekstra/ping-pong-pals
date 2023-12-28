@@ -1,4 +1,4 @@
-{% extends "scoreboard/base.html" %}
+{% extends "scoreboard/generic/base.html" %}
 
 {% block content %}
 
@@ -61,7 +61,7 @@
                         <form action="{% url 'deactivate-league' %}" method="post">
                             {% csrf_token %}
                             <input type="hidden" name="next-page-name" value="{{ current_view }}">
-                            <input type="submit" value="unset as default" class="px-4 py-3 rounded bg-blue-700 text-white mr-2
+                            <input type="submit" value="this is your default" class="px-4 py-3 rounded bg-blue-700 text-white mr-2
                                 cursor-pointer">
                         </form>
                     {% else %}
@@ -73,10 +73,6 @@
                                 cursor-pointer">
                         </form>
                     {% endif %}
-                {% endif %}
-
-                {% if league_info.league.owner == logged_in_player %}
-                    <a href="/" class="block px-4 py-3 rounded bg-red-500 text-white mr-2">manage</a>
                 {% endif %}
             </div>
         </div>
