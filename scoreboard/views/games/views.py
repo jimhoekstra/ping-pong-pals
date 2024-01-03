@@ -6,7 +6,7 @@ from django.http import HttpRequest, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_GET, require_POST
 
-from scoreboard.decorators import require_POST_params
+from scoreboard.decorators import require_POST_params, verify_access_to_league
 from scoreboard.models import Game, Player, League
 from scoreboard.elo import EloRating
 from scoreboard.state import ApplicationState
@@ -34,18 +34,21 @@ def select_league_page(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
+@verify_access_to_league
 @require_GET
 def games_without_page(request: HttpRequest, league: str) -> HttpResponse:
     return redirect('games-page', league=league, page=1)
 
 
 @login_required
+@verify_access_to_league
 @require_GET
 def games_page(request: HttpRequest, league: str, page: int = 1) -> HttpResponse:
     '''
     View of the most recent games that have been played.
     '''
     league_obj = League.objects.get(slug=league)
+
     GAMES_PER_PAGE: int = 10
 
     total_number_of_games = Game.objects.filter(league=league_obj).count()
@@ -62,6 +65,7 @@ def games_page(request: HttpRequest, league: str, page: int = 1) -> HttpResponse
 
 
 @login_required
+@verify_access_to_league
 @require_GET
 def games_table(request: HttpRequest, league: str, page: int = 1) -> HttpResponse:
     '''
@@ -84,6 +88,7 @@ def games_table(request: HttpRequest, league: str, page: int = 1) -> HttpRespons
 
 
 @login_required
+@verify_access_to_league
 @require_GET
 def new_game_page(request: HttpRequest, league: str) -> HttpResponse:
     '''
@@ -100,6 +105,7 @@ def new_game_page(request: HttpRequest, league: str) -> HttpResponse:
 
 
 @login_required
+@verify_access_to_league
 @require_POST
 @require_POST_params(['winner', 'loser', 'winner-points', 'loser-points'])
 def submit_new_game(request: HttpRequest, league: str) -> HttpResponse:

@@ -1,7 +1,7 @@
 from math import ceil
 
 from scoreboard.views.context import LeagueDependentContext
-from scoreboard.models import Game, Player
+from scoreboard.models import Game
 
 
 class GamesContext(LeagueDependentContext):
@@ -27,5 +27,5 @@ class GamesContext(LeagueDependentContext):
         return self
 
     def add_all_players(self):
-        self.context[self.ALL_PLAYERS_KEY] = Player.objects.all()
+        self.context[self.ALL_PLAYERS_KEY] = self.get_league().participants.all()
         return self

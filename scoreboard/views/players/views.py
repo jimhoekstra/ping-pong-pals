@@ -7,6 +7,7 @@ from django.views.decorators.http import require_GET
 
 from scoreboard.models import Player, League
 from scoreboard.state import ApplicationState
+from scoreboard.decorators import verify_access_to_league
 from scoreboard.views.leagues.context import LeagueContext
 from scoreboard.views.players.context import PlayersContext
 
@@ -31,6 +32,7 @@ def select_league_page(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
+@verify_access_to_league
 @require_GET
 def page(request: HttpRequest, league: str) -> HttpResponse:
     '''
@@ -48,12 +50,14 @@ def page(request: HttpRequest, league: str) -> HttpResponse:
 
 
 @login_required
+@verify_access_to_league
 @require_GET
 def single_player_without_page(request: HttpRequest, league: str, player_name: str) -> HttpResponse:
     return redirect('player', league=league, player_name=player_name, page=1)
 
 
 @login_required
+@verify_access_to_league
 @require_GET
 def single_player_page(request: HttpRequest, league: str, player_name: str, page: int) -> HttpResponse:
     '''
@@ -77,6 +81,7 @@ def single_player_page(request: HttpRequest, league: str, player_name: str, page
 
 
 @login_required
+@verify_access_to_league
 @require_GET
 def games_for_player(request: HttpRequest, league: str, player_name: str, page: int = 1) -> HttpResponse:
     '''

@@ -21,11 +21,6 @@ class GenericContext:
         self.request = request
         self.context = {self.CURRENT_VIEW_KEY: self.CURRENT_VIEW}
 
-        self.run_calculations()
-
-    def run_calculations(self):
-        pass
-
     def override_current_view(self, current_view: str):
         self.context[self.CURRENT_VIEW_KEY] = current_view
         return self

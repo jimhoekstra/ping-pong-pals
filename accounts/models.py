@@ -12,6 +12,7 @@ class SignupKey(models.Model):
     used = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     used_by = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE)
+    add_as_member_of = models.ForeignKey('scoreboard.League', null=True, blank=True, on_delete=models.CASCADE)
 
     def __str__(self) -> str:
         return 'Signup Key: ' + self.code[:5] + '...'

@@ -33,7 +33,12 @@ def new_account_page(request: HttpRequest) -> HttpResponse:
     '''
     View of the new account page.
     '''
-    context_data: dict[str, Any] = {'current_view': 'login'}    
+    context_data: dict[str, Any] = {'current_view': 'login'}
+
+    if 'sign-up-key' in request.GET:
+        sign_up_key = request.GET['sign-up-key']
+        context_data['sign_up_key'] = sign_up_key
+    
     return render(request, 'accounts/new_account.html', context=context_data)
 
 
@@ -94,6 +99,10 @@ def create_account(request: HttpRequest) -> HttpResponse:
     signup_key.used = True
     signup_key.used_by = new_user
     signup_key.save()
+
+    if signup_key.add_as_member_of is not None:
+        league = signup_key.add_as_member_of
+        league.participants.add(new_player)
 
     login(request, new_user)
 
