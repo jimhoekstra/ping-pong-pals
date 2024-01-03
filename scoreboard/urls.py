@@ -8,6 +8,7 @@ from scoreboard.views import players
 
 home_urlpatterns = [
     path('', home.page, name='home'),
+    path('not-implemented', home.not_implemented, name='not-implemented'),
 ]
 
 leagues_urlpatterns = [
@@ -21,8 +22,10 @@ leagues_urlpatterns = [
 
 games_urlpatterns = [
     path('games', games.views.select_league_page, name='games'),
-    path('leagues/<slug:league>/games', games.views.games_page, name='games-for-league'),
+    path('leagues/<slug:league>/games', games.views.games_without_page, name='games-page'),
     path('leagues/<slug:league>/games/<int:page>', games.views.games_page, name='games-page'),
+    path('leagues/<slug:league>/games-table', games.views.games_table, name='games-table'),
+    path('leagues/<slug:league>/games-table/<int:page>', games.views.games_table, name='games-table'),
     path('leagues/<slug:league>/games/new', games.views.new_game_page, name='add-game'),
     path('leagues/<slug:league>/games/submit', games.views.submit_new_game, name='new-game'),
 ]
@@ -30,8 +33,10 @@ games_urlpatterns = [
 players_urlpatterns = [
     path('players', players.views.select_league_page, name='players'),
     path('leagues/<slug:league>/players', players.views.page, name='players-for-league'),
-    path('leagues/<slug:league>/players/<str:player_name>', players.views.single_player_page, name='player'),
+    path('leagues/<slug:league>/players/<str:player_name>', players.views.single_player_without_page, name='player'),
     path('leagues/<slug:league>/players/<str:player_name>/<int:page>', players.views.single_player_page, name='player'),
+    path('leagues/<slug:league>/games-for-player/<str:player_name>/<int:page>', 
+         players.views.games_for_player, name='games-for-player'),
 ]
 
 

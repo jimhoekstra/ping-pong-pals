@@ -23,3 +23,10 @@ def page(request: HttpRequest) -> HttpResponse:
     context_data['number_of_games_this_month'] = Game.objects.filter(
         date__gte=datetime(year=now.year, month=now.month, day=1)).count()
     return render(request, 'scoreboard/home/page.html', context=context_data)
+
+
+def not_implemented(request: HttpRequest) -> HttpResponse:
+    '''
+    Page to show when the users requests functionality that is not yet implemented.
+    '''
+    return render(request, 'scoreboard/generic/not_implemented.html')

@@ -1,0 +1,44 @@
+<div id="games-table" class="mb-4">
+    {% if total_number_of_games == 0 %}
+        <p>There seem to be no games yet in this league</p>
+    {% else %}
+        <table class="table-auto my-5 w-full mb-16">
+            <thead>
+                <tr class="text-left lg:text-xl">
+                    <th class="p-5 rounded-l-lg bg-blue-200">date & time</th>
+                    <th class="p-5 bg-blue-200">winner</th>
+                    <th class="p-5 bg-blue-200">loser</th>
+                    <th class="p-5 rounded-r-lg bg-blue-200">score</th>
+                </tr>
+            </thead>
+            <tbody class="text-sm lg:text-base">
+                {% for game in all_games %}
+                    <tr>
+                        <td class="px-5 py-2 hidden lg:block">{{ game.date|date:"D M jS - H:i" }}</td>
+                        <td class="px-5 py-2">
+                            <a href="{% url 'player' current_league.slug game.winner.name %}" class="underline text-sky-600">
+                            {{ game.winner.name }}</a>
+                        </td>
+                        <td class="px-5 py-2">
+                            <a href="{% url 'player' current_league.slug game.loser.name %}" class="underline text-sky-600">
+                            {{ game.loser.name }}</a>
+                        </td>
+                        <td class="px-5 py-2">{{ game.winner_points }}-{{ game.loser_points }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
+    <div class="my-10">
+        {% for page in pages %}
+            <button class="rounded-md py-3 bg-orange-100 px-4 mr-2
+                {% if page == current_page %} border-4 border-blue-600{% endif %}"
+                hx-get="{% url 'games-table' current_league.slug page %}"
+                hx-target="#games-table"
+                hx-trigger="click"
+                hx-swap="outerHTML"
+                hx-replace-url="{% url 'games-page' current_league.slug page %}">{{ page }}</a>
+        {% endfor %}
+    </div>
+</div>

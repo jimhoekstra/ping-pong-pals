@@ -41,6 +41,8 @@ class PlayersContext(LeagueDependentContext):
         
         self.context['player_scores'] = player_scores
         self.context['player_obj'] = player
+        self.context['win_percentage'] = calculate_win_percentage(
+            len(player.won_games.all()), len(player.won_games.all()) + len(player.lost_games.all()))  # type: ignore
         self.context['pages'] = list(range(1, ceil(total_games_for_player / games_per_page)+1))
         self.context['current_page'] = page
         self.context['total_games'] = total_games_for_player

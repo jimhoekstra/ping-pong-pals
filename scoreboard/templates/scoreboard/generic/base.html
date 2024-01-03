@@ -15,21 +15,21 @@
 <body>
     <div class="min-h-screen flex flex-col">   
         {% include "scoreboard/generic/navbar.html" %}
-        <div class="grow lg:grid lg:grid-cols-4">
-            <div class="hidden lg:block">
-                
-            </div>
-            <div class="lg:col-span-2 p-3 lg:p-0 font-mono">
+        <div class="grow">
+            <div class="p-5 lg:p-0 font-mono">
                 <div class="mx-auto" style="max-width: 800px;">
                     {% block content %}{% endblock %}
                 </div>
             </div>
-            <div class="hidden lg:block"></div>
         </div>
         <div>
             {% include "scoreboard/generic/footer.html" %}
         </div>
     </div>
+
+    <script src="https://unpkg.com/htmx.org@1.9.10" 
+        integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC" 
+        crossorigin="anonymous"></script>
 </body>
 
 </html>

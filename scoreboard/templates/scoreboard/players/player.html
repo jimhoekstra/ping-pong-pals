@@ -3,45 +3,32 @@
 {% block content %}
 
 <div>
-    <h1 class="text-4xl mb-2 text-red-900">{{ player_obj.name }} ({{ player_obj.current_elo }})</h1>
-    <p class="mt-5 mb-8">
-        {{ player_obj.name }} has played a grand total of {{ total_games }} game{% if total_games != 1 %}s{% endif %}.
-    </p>
+    <h1 class="text-4xl mb-2 text-red-900">{{ player_obj.name }}</h1>
 
-    <table class="table-auto w-full my-10">
-        <thead>
-            <tr class="text-left lg:text-xl">
-                <th class="p-5 hidden lg:block rounded-l-lg bg-blue-200">date & time</th>
-                <th class="p-5 bg-blue-200">game</th>
-                <th class="p-5 bg-blue-200 rounded-r-lg">elo after game</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for player_score in player_scores %}
-                <tr>
-                    <td class="py-2 px-5 hidden lg:block">{{ player_score.datetime|date:"D M jS - H:i" }}</td>
-                    <td class="py-2 px-5">
-                        {% if player_score.result_of_game.winner == player_score.player %}
-                            won from <a class="underline text-sky-600" href="{% url 'player' current_league.slug player_score.result_of_game.loser.name %}">
-                                {{ player_score.result_of_game.loser.name }}</a> 
-                            with {{ player_score.result_of_game.winner_points }}-{{ player_score.result_of_game.loser_points }} 
-                        {% endif %}
-                        {% if player_score.result_of_game.loser == player_score.player %}
-                            lost from <a class="underline text-sky-600" href="{% url 'player' current_league.slug player_score.result_of_game.winner.name %}">
-                                {{ player_score.result_of_game.winner.name }}</a> 
-                            with {{ player_score.result_of_game.winner_points }}-{{ player_score.result_of_game.loser_points }} 
-                        {% endif %}
-                    </td>
-                    <td class="py-2 px-5">{{ player_score.rating }}</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <div class="flex flex-wrap justify-around my-8">
+        <div class="border p-10 bg-blue-200 rounded-full m-3 text-center" style="min-width: 190px;">
+            <p class="text-5xl text-red-900">{{ player_obj.current_elo }}</p>
+            <p class="text-lg text-slate-700">current</p>
+            <p class="text-lg text-slate-700">elo rating</p>
+        </div>
+        
+        <div class="border p-10 bg-blue-200 rounded-full m-3 text-center" style="min-width: 190px;">
+            <p class="text-5xl text-red-900">{{ win_percentage }}</p>
+            <p class="text-lg text-slate-700">of games</p>
+            <p class="text-lg text-slate-700">won</p>
+        </div>
+        
+        <div class="border p-10 bg-blue-200 rounded-full m-3 text-center" style="min-width: 190px;">
+            <p class="text-5xl text-red-900">{{ total_games }}</p>
+            <p class="text-lg text-slate-700">game{% if total_games != 1 %}s{% endif %}</p>
+            <p class="text-lg text-slate-700">played</p>
+        </div>
 
-    {% for page in pages %}
-        <a href="{% url 'player' current_league.slug player_obj.name page %}" class="rounded-md py-3 px-4 bg-orange-100
-                {% if page == current_page %} border-4 border-blue-600{% endif %}">{{ page }}</a>
-    {% endfor %}
+    </div>
+
+    <h2 class="text-3xl mb-2 text-red-900">Recent Games</h2>
+    {% include "scoreboard/players/games_for_player.html" %}
+
 </div>
 
 {% endblock %}

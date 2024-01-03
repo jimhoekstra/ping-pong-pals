@@ -29,7 +29,6 @@ class ApplicationState:
             except League.DoesNotExist:
                 return cls.get_league_if_only_one(request=request)
         else:
-            print('no league in session')
             return cls.get_league_if_only_one(request=request)
 
     @classmethod

@@ -19,18 +19,24 @@ from scoreboard.views.leagues.context import LeagueContext
 def select_league_page(request: HttpRequest) -> HttpResponse:
     active_league = ApplicationState.get_active_league(request=request)
     if active_league is not None:
-        return redirect('games-for-league', league=active_league.slug)
+        return redirect('games-page', league=active_league.slug, page=1)
     
     context = (LeagueContext(request=request)
                 .override_current_view('games')
                 .set_page_title('Games')
-                .set_next_page_url_name('games-for-league')
+                .set_next_page_url_name('games-page')
                 .add_current_league_from_app_state_if_exists()
                 .add_logged_in_player()
                 .add_all_leagues_info()
                 .as_context_dict())
 
     return render(request, 'scoreboard/leagues/page.html', context=context)
+
+
+@login_required
+@require_GET
+def games_without_page(request: HttpRequest, league: str) -> HttpResponse:
+    return redirect('games-page', league=league, page=1)
 
 
 @login_required
@@ -53,6 +59,28 @@ def games_page(request: HttpRequest, league: str, page: int = 1) -> HttpResponse
                                 .as_context_dict())
     
     return render(request, 'scoreboard/games/page.html', context=context)
+
+
+@login_required
+@require_GET
+def games_table(request: HttpRequest, league: str, page: int = 1) -> HttpResponse:
+    '''
+    View of the most recent games that have been played.
+    '''
+    league_obj = League.objects.get(slug=league)
+    GAMES_PER_PAGE: int = 10
+
+    total_number_of_games = Game.objects.filter(league=league_obj).count()
+    if page > ceil(total_number_of_games / GAMES_PER_PAGE) and total_number_of_games != 0:
+        return redirect('games')
+    
+    context: dict[str, Any] = (GamesContext(request=request)
+                                .add_current_league(league=league_obj)
+                                .add_total_number_of_games()
+                                .add_games_for_page(page=page, games_per_page=GAMES_PER_PAGE)
+                                .as_context_dict())
+    
+    return render(request, 'scoreboard/games/games_table.html', context=context)
 
 
 @login_required

@@ -1,5 +1,5 @@
 
-<div class="flex relative">
+<div class="flex relative self-center" style="min-width: 130px; min-height: 300px;">
     <div id="ball" class="rounded-full bg-slate-100 absolute border-2 border-slate-700"></div>
     <div id="paddle-whole">
         <div id="paddle" class="absolute bg-red-500 border-t border-x-2 border-b-4 border-black"></div>
@@ -9,7 +9,7 @@
 
 <style>
     #ball {
-        left: 56px;
+        left: 91px;
         animation-duration: 1s;
         animation-name: bounce;
         animation-iteration-count: infinite;
@@ -23,12 +23,13 @@
         width: 50px;
         height: 20px;
         border-radius: 100%;
-        left: 40px;
+        left: 75px;
         z-index: 0;
     }
     
     #paddle-handle {
         transform: translateY(192px);
+        left: 35px;
         height: 5px;
         width: 42px;
     }

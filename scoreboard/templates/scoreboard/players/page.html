@@ -7,17 +7,16 @@
         <div class="mb-5">
             <h1 class="text-4xl text-red-900">Leaderboard</h1>
             <p class="my-3">
-                Current league: {{ current_league.name }} 
+                Your current league: {{ current_league.name }} 
                 (<a href="{% url 'leagues' %}" class="underline text-sky-600">change</a>)
             </p>
         </div>
     </div>
 
-    {% include "scoreboard/players/leaderboard-selector.html" %}
     {% include "scoreboard/players/leaderboard.html" %}
 
     <p>
-        Note: you need to play at least three games in other to get a rating.
+        Note: you need to play at least three games in other to get an Elo rating.
     </p>   
 
 </div>

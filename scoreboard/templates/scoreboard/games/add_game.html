@@ -2,11 +2,11 @@
 
 {% block content %}
 
-<h1 class="text-4xl mb-8">new game</h2>
-<div class="p-4 rounded bg-blue-100">
+<h1 class="text-4xl mb-8 text-red-900">New Game</h2>
+<div class="p-4 rounded-lg bg-blue-100">
     <form action="{% url 'new-game' current_league.slug %}" method="post">
         {% csrf_token %}
-        <h2 class="mt-4 text-xl">winner</h2>
+        <h2 class="mt-4 text-xl">Winner</h2>
         <select name="winner" class="w-full bg-white rounded p-3 my-2">
             {% for player in all_players %}
                 <option value="{{ player.pk }}">{{ player.name }}</option>
@@ -14,7 +14,7 @@
         </select>
         <input type="number" class="w-full p-3 rounded my-2 outline-none focus:outline-4 
             focus:outline-blue-600 outline-offset-0" name="winner-points" placeholder="points">
-        <h2 class="mt-4 text-xl">loser</h2>
+        <h2 class="mt-4 text-xl">Loser</h2>
         <select name="loser" class="w-full bg-white rounded p-3 my-2">
             {% for player in all_players %}
                 <option value="{{ player.pk }}">{{ player.name }}</option>
@@ -22,7 +22,7 @@
         </select>
         <input type="number" class="w-full p-3 rounded my-2 outline-none focus:outline-4 
             focus:outline-blue-600 outline-offset-0" name="loser-points" placeholder="points">
-        <input type="submit" value="submit" class="p-3 w-full bg-red-500 rounded text-white cursor-pointer my-2
+        <input type="submit" value="Submit" class="p-3 w-full bg-red-500 rounded text-white cursor-pointer my-2
             ">
     </form>
 </div>

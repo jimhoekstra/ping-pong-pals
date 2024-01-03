@@ -49,7 +49,13 @@ def page(request: HttpRequest, league: str) -> HttpResponse:
 
 @login_required
 @require_GET
-def single_player_page(request: HttpRequest, league: str, player_name: str, page: int = 1) -> HttpResponse:
+def single_player_without_page(request: HttpRequest, league: str, player_name: str) -> HttpResponse:
+    return redirect('player', league=league, player_name=player_name, page=1)
+
+
+@login_required
+@require_GET
+def single_player_page(request: HttpRequest, league: str, player_name: str, page: int) -> HttpResponse:
     '''
     See a player's game and score history.
     '''
@@ -68,3 +74,26 @@ def single_player_page(request: HttpRequest, league: str, player_name: str, page
                                .as_context_dict())
     
     return render(request, 'scoreboard/players/player.html', context=context)
+
+
+@login_required
+@require_GET
+def games_for_player(request: HttpRequest, league: str, player_name: str, page: int = 1) -> HttpResponse:
+    '''
+    See a player's recent games.
+    '''
+    league_obj = League.objects.get(slug=league)
+
+    GAMES_PER_PAGE: int = 10
+
+    try:
+        player_obj = Player.objects.get(name=player_name)
+    except Player.DoesNotExist:
+        return render(request, 'scoreboard/bad_request.html', status=400)
+    
+    context: dict[str, Any] = (PlayersContext(request=request)
+                               .add_current_league(league=league_obj)
+                               .add_single_player_info(player=player_obj, page=page, games_per_page=GAMES_PER_PAGE)
+                               .as_context_dict())
+    
+    return render(request, 'scoreboard/players/games_for_player.html', context=context)

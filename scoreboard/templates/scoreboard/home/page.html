@@ -2,16 +2,16 @@
 
 {% block content %}
 
-<div class="grid grid-cols-1 lg:grid-cols-2 mt-8 justify-items-center">
+<div class="grid grid-cols-1 md:grid-cols-2 mt-8 justify-items-center md:text-lg">
     {% load static %}
-    <img src="{% static 'scoreboard/PingPong.png' %}" class="hidden lg:block self-center px-10">
+    <img src="{% static 'scoreboard/PingPong.png' %}" class="hidden md:block self-center px-10">
     <div>
-        <h1 class="text-5xl mb-10 text-red-900">Ping Pong Pals</h1>
+        <h1 class="text-4xl md:text-5xl mb-10 text-red-900">Ping Pong Pals</h1>
 
-        <p class="mt-8 text-lg">
+        <p class="mt-8">
             Welcome to ping pong pals! Enjoy your daily serve of friendly competition.
         </p>
-        <p class="mt-5 text-lg">
+        <p class="mt-5">
             This website is a free and open source project for encouraging friendly competition between ping pong
             players of all levels.
         </p>
@@ -56,26 +56,27 @@
 
 {% endif %}
 
-<h2 class="text-4xl mt-8 mb-4 text-red-900">Why use ping pong pals?</h2>
+<h2 class="text-3xl md:text-4xl mt-8 mb-4 text-red-900">Why use ping pong pals?</h2>
 
-<div class="grid grid-cols-5">
-    <div class="col-span-4">
-        <p class="text-lg mt-8">
+<div class="flex flex-col md:flex-row md:text-lg">
+    <div class="grow">
+        <p class="mt-8">
             🏅 What's the score? Who's the champion? Never again lose yourself in these endless discussions.
             Instead, look at the data and find out the truth.
         </p>
         
-        <p class="text-lg mt-8">
+        <p class="mt-8">
             🚀 Track your progress and see how you get better. Learn from your experiences
             and set new goals.
         </p>
         
-        <p class="text-lg mt-8 mb-16">
+        <p class="mt-8 mb-16">
             🙌 Share your results and celebrate successes together!
         </p>
     </div>
     
     {% include "scoreboard/home/pingpong-animation.html" %}
+    
 </div>
 
 {% endblock %}
