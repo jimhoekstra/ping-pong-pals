@@ -1,0 +1,51 @@
+{% extends "scoreboard/generic/base.html" %}
+
+{% block content %}
+
+<h1 class="text-4xl text-red-900">{{ league.name }}</h1>
+
+<div class="flex flex-wrap justify-around my-8">
+    <div class="border p-10 bg-blue-200 rounded-full m-3 text-center" style="min-width: 190px;">
+        <p class="text-5xl text-red-900">{{ n_participants }}</p>
+        <p class="text-lg text-slate-700">players</p>
+        <p class="text-lg text-slate-700">registered</p>
+    </div>
+    <div class="border p-10 bg-blue-200 rounded-full m-3 text-center" style="min-width: 190px;">
+        <p class="text-5xl text-red-900">{{ n_games }}</p>
+        <p class="text-lg text-slate-700">game{% if number_of_games_this_month != 1 %}s{% endif %} in</p>
+        <p class="text-lg text-slate-700">total</p>
+    </div>
+    <div class="border p-10 bg-blue-200 rounded-full m-3 text-center" style="min-width: 190px;">
+        <p class="text-5xl text-red-900">{{ n_games_this_month }}</p>
+        <p class="text-lg text-slate-700">game{% if number_of_games_this_month != 1 %}s{% endif %} this</p>
+        <p class="text-lg text-slate-700">month</p>
+    </div>
+</div>
+
+{% if is_owner %}
+
+<h2 class="text-3xl text-red-900 my-2">Manage</h2>
+
+<p>Only you as the owner of this league can see this section.</p>
+
+<h3 class="text-xl mt-6 mb-2 underline">Sign-Up Keys:</h3>
+{% if n_sign_up_tokens > 0 %}
+    <p>Right click + copy to copy the full URL that includes the code.</p>
+{% endif %}
+
+<ul class="my-5">
+    {% for token in existing_sign_up_tokens %}
+        <li>
+            <a href="{% url 'new-account-page' token.code %}" class="underline text-sky-600">{{ token.code }}</a>
+        </li>
+    {% endfor %}
+</ul>
+
+<form action="{% url 'create-sign-up-token' league.slug %}" method="post">
+    {% csrf_token %}
+    <input type="submit" value="Create Sign-Up Key" class="p-3 bg-red-500 rounded text-white cursor-pointer my-2">
+</form>
+
+{% endif %}
+
+{% endblock %}

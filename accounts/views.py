@@ -1,13 +1,16 @@
 from typing import Any
+
 from django.shortcuts import render, redirect
 from django.http import HttpRequest, HttpResponse
-from scoreboard.decorators import require_POST_params
 from django.views.decorators.http import require_GET, require_POST
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+
 from accounts.models import SignupKey
-from scoreboard.models import Player
+
+from scoreboard.models import Player, League
+from scoreboard.decorators import require_POST_params, verify_owner_of_league
 
 
 @require_GET
@@ -29,14 +32,13 @@ def login_page(request: HttpRequest) -> HttpResponse:
 
 
 @require_GET
-def new_account_page(request: HttpRequest) -> HttpResponse:
+def new_account_page(request: HttpRequest, sign_up_key: str | None = None) -> HttpResponse:
     '''
     View of the new account page.
     '''
     context_data: dict[str, Any] = {'current_view': 'login'}
 
-    if 'sign-up-key' in request.GET:
-        sign_up_key = request.GET['sign-up-key']
+    if sign_up_key is not None:
         context_data['sign_up_key'] = sign_up_key
     
     return render(request, 'accounts/new_account.html', context=context_data)
@@ -154,3 +156,18 @@ def update_password(request: HttpRequest) -> HttpResponse:
     authenticated_user.save()
     
     return redirect('account-overview')
+
+
+@login_required
+@verify_owner_of_league
+@require_POST
+def create_sign_up_token(request: HttpRequest, league: str) -> HttpResponse:
+    try:
+        league_obj = League.objects.get(slug=league)
+    except League.DoesNotExist:
+        return render(request, 'scoreboard/bad_request.html', status=400)
+    
+    new_sign_up_token = SignupKey(add_as_member_of=league_obj)
+    new_sign_up_token.save()
+
+    return redirect('league-detail', league=league_obj.slug)

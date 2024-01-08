@@ -21,12 +21,12 @@
         <div class="mb-5 rounded bg-blue-100 p-5">
 
             <h2 class="text-3xl">
-                <a href="{% url 'not-implemented' %}" class="text-sky-600 underline">
+                <a href="{% url 'league-detail' league_info.league.slug %}" class="text-sky-600 underline">
                     {{ league_info.league.name }}
                 </a>
             </h2>
 
-            <p class="p-5 border my-5 border-slate-400 rounded bg-slate-100 border-dashed">
+            <p class="p-5 border my-5 border-slate-400 rounded bg-slate-100 border-dashed text-lg">
                 {% if league_info.league.description == '' %}
                     <span class="text-slate-700">[no description]</span>
                 {% else %}
@@ -37,42 +37,33 @@
             <table class="my-5">
                 <tbody>
                     <tr>
-                        <td class="px-3">number of players:</td>
+                        <td class="px-3">Number of players:</td>
                         <td class="px-3">{{ league_info.n_participants }}</td>
                     </tr>
                     <tr>
-                        <td class="px-3">number of games:</td>
+                        <td class="px-3">Number of games:</td>
                         <td class="px-3">{{ league_info.n_games }}</td>
                     </tr>
                 </tbody>
             </table>
             
             <div class="flex">
-                {% if league_info.is_member %}
-                    <p class="px-4 py-3 rounded bg-blue-700 text-white mr-2 select-none">
-                        you're a member
-                    </p>
-                {% else %}
-                    <a href="{% url 'not-implemented' %}" class="block px-4 py-3 rounded bg-red-500 text-white mr-2">request to join</a>
-                {% endif %}
 
-                {% if league_info.is_member %}
-                    {% if league_info.league == current_league %}    
-                        <form action="{% url 'deactivate-league' %}" method="post">
-                            {% csrf_token %}
-                            <input type="hidden" name="next-page-name" value="{{ current_view }}">
-                            <input type="submit" value="this is your default" class="px-4 py-3 rounded bg-blue-700 text-white mr-2
-                                cursor-pointer">
-                        </form>
-                    {% else %}
-                        <form action="{% url 'activate-league' %}" method="post">
-                            {% csrf_token %}
-                            <input type="hidden" name="activate-league-id" value="{{ league_info.league.pk }}">
-                            <input type="hidden" name="next-page-name" value="{{ current_view }}">
-                            <input type="submit" value="set as default" class="px-4 py-3 rounded bg-red-500 text-white mr-2
-                                cursor-pointer">
-                        </form>
-                    {% endif %}
+                {% if league_info.league == current_league %}    
+                    <form action="{% url 'deactivate-league' %}" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="next-page-name" value="{{ current_view }}">
+                        <input type="submit" value="This is your default" class="px-4 py-3 rounded bg-blue-700 text-white mr-2
+                            cursor-pointer">
+                    </form>
+                {% else %}
+                    <form action="{% url 'activate-league' %}" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="activate-league-id" value="{{ league_info.league.pk }}">
+                        <input type="hidden" name="next-page-name" value="{{ current_view }}">
+                        <input type="submit" value="Set as default" class="px-4 py-3 rounded bg-red-500 text-white mr-2
+                            cursor-pointer">
+                    </form>
                 {% endif %}
             </div>
         </div>

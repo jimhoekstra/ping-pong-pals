@@ -8,7 +8,7 @@ def calculate_win_percentage(n_won_games, total_n_games):
     if total_n_games == 0:
         return '--'
     else:
-        return str(round(n_won_games / total_n_games * 100)) + '%'
+        return str(round(n_won_games / total_n_games * 100))
 
 
 class PlayersContext(LeagueDependentContext):

@@ -45,3 +45,23 @@ def verify_access_to_league(func):
         return func(request, *args, **kwargs)
     
     return wrapper
+
+
+def verify_owner_of_league(func):
+
+    def wrapper(request: HttpRequest, *args, **kwargs):
+        if not 'league' in kwargs:
+            return bad_request(request=request)
+        
+        player: Player = request.user.player  # type: ignore
+        try:
+            league: League = League.objects.get(slug=kwargs['league'])
+        except League.DoesNotExist:
+            return bad_request(request=request)
+        
+        if not league.owner == player:  # type: ignore
+            return bad_request(request=request)
+        
+        return func(request, *args, **kwargs)
+    
+    return wrapper

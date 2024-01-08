@@ -20,12 +20,10 @@
 
 {% if user_is_authenticated %}
 <div class="flex flex-wrap justify-around my-16">
-    <div>
-        <div class="border p-10 bg-blue-200 rounded-full m-3 text-center" style="min-width: 190px;">
-            <p class="text-5xl text-red-900">{{ total_number_of_games }}</p>
-            <p class="text-lg text-slate-700">game{% if total_number_of_games != 1 %}s{% endif %}</p>
-            <p class="text-lg text-slate-700">played</p>
-        </div>
+    <div class="border p-10 bg-blue-200 rounded-full m-3 text-center" style="min-width: 190px;">
+        <p class="text-5xl text-red-900">{{ total_number_of_games }}</p>
+        <p class="text-lg text-slate-700">game{% if total_number_of_games != 1 %}s{% endif %}</p>
+        <p class="text-lg text-slate-700">played</p>
     </div>
     <div class="border p-10 bg-blue-200 rounded-full m-3 text-center" style="min-width: 190px;">
         <p class="text-5xl text-red-900">{{ number_of_games_this_month }}</p>

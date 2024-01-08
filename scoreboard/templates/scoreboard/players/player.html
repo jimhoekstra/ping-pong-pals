@@ -7,13 +7,18 @@
 
     <div class="flex flex-wrap justify-around my-8">
         <div class="border p-10 bg-blue-200 rounded-full m-3 text-center" style="min-width: 190px;">
-            <p class="text-5xl text-red-900">{{ player_obj.current_elo }}</p>
+            {% if total_games > 2 %}
+                <p class="text-5xl text-red-900">{{ player_obj.current_elo }}</p>
+            {% else %}
+                <p class="text-5xl text-red-900">--</p>
+            {% endif %}
+            
             <p class="text-lg text-slate-700">current</p>
             <p class="text-lg text-slate-700">elo rating</p>
         </div>
         
         <div class="border p-10 bg-blue-200 rounded-full m-3 text-center" style="min-width: 190px;">
-            <p class="text-5xl text-red-900">{{ win_percentage }}</p>
+            <p class="text-5xl text-red-900">{{ win_percentage }}%</p>
             <p class="text-lg text-slate-700">of games</p>
             <p class="text-lg text-slate-700">won</p>
         </div>

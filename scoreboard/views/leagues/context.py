@@ -21,11 +21,12 @@ class LeagueContext(GenericContext):
         return self
     
     def add_all_leagues_info(self):
-        all_leagues = League.objects.all()
+        player = self.request.user.player  # type: ignore
+
+        all_leagues = player.leagues.all()
 
         self.context[self.ALL_LEAGUES_KEY] = [{
             'league': league,
-            'is_member': league.participants.contains(self.request.user.player),  # type: ignore
             'n_participants': league.participants.count(),
             'n_games': league.games.count()  # type: ignore
         } for league in all_leagues]
