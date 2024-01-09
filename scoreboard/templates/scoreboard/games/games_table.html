@@ -5,16 +5,16 @@
         <table class="table-auto my-5 w-full mb-16">
             <thead>
                 <tr class="text-left lg:text-xl">
-                    <th class="p-5 rounded-l-lg bg-blue-200">date & time</th>
+                    <th class="p-5 rounded-l-lg bg-blue-200 hidden lg:block">date</th>
                     <th class="p-5 bg-blue-200">winner</th>
                     <th class="p-5 bg-blue-200">loser</th>
                     <th class="p-5 rounded-r-lg bg-blue-200">score</th>
                 </tr>
             </thead>
-            <tbody class="text-sm lg:text-base">
+            <tbody>
                 {% for game in all_games %}
                     <tr>
-                        <td class="px-5 py-2 hidden lg:block">{{ game.date|date:"D M jS - H:i" }}</td>
+                        <td class="px-5 py-2 hidden lg:block">{{ game.date|date:"M jS (D)" }}</td>
                         <td class="px-5 py-2">
                             <a href="{% url 'player' current_league.slug game.winner.name %}" class="underline text-sky-600">
                             {{ game.winner.name }}</a>

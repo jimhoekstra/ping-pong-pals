@@ -3,9 +3,8 @@
         <tr class="text-left lg:text-xl">
             <th class="p-5 bg-blue-200 rounded-l-lg">#</th>
             <th class="p-5 bg-blue-200">name</th>
-            <th class="p-5 bg-blue-200">wins</th>
             <th class="p-5 bg-blue-200">elo</th>
-            <th class="p-5 bg-blue-200 rounded-r-lg">#games</th>
+            <th class="p-5 bg-blue-200 rounded-r-lg hidden lg:block">#games</th>
         </tr>
     </thead>
     <tbody>
@@ -14,9 +13,8 @@
                 <td class="py-2 px-5">{{ forloop.counter }}</td>
                 <td class="py-2 px-5"><a
                     class="underline text-sky-600" href="{% url 'player' current_league.slug player.name %}">{{ player.name }}</a></td>
-                    <td class="py-2 px-5">{{ player.win_percentage }}</td>
-                    <td class="py-2 px-5">{{ player.current_elo }}</td>
-                    <td class="py-2 px-5">{{ player.num_games }}</td>
+                <td class="py-2 px-5">{{ player.current_elo }}</td>
+                <td class="py-2 px-5 hidden lg:block">{{ player.num_games }}</td>
             </tr>
         {% endfor %}
         {% for player in unrated_players %}
@@ -24,9 +22,8 @@
                 <td class="py-2 px-5">--</td>
                 <td class="py-2 px-5"><a
                     class="underline text-sky-600" href="{% url 'player' current_league.slug player.name %}">{{ player.name }}</a></td>
-                    <td class="py-2 px-5">{{ player.win_percentage }}</td>
-                    <td class="py-2 px-5">--</td>
-                    <td class="py-2 px-5">{{ player.num_games }}</td>
+                <td class="py-2 px-5">--</td>
+                <td class="py-2 px-5 hidden lg:block">{{ player.num_games }}</td>
             </tr>
         {% endfor %}
     </tbody>

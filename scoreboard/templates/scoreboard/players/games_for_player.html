@@ -3,15 +3,15 @@
     <table class="w-full my-10 table-auto">
         <thead>
             <tr class="text-left lg:text-xl">
-                <th class="p-5 hidden lg:block rounded-l-lg bg-blue-200" style="min-width: 220px;">date & time</th>
+                <th class="p-5 hidden lg:block rounded-l-lg bg-blue-200" style="min-width: 220px;">date</th>
                 <th class="p-5 bg-blue-200">game</th>
-                <th class="p-5 bg-blue-200 rounded-r-lg" style="min-width: 50px;">elo</th>
+                <th class="p-5 bg-blue-200 rounded-r-lg" style="min-width: 50px;">elo after game</th>
             </tr>
         </thead>
         <tbody>
             {% for player_score in player_scores %}
                 <tr>
-                    <td class="py-2 px-5 hidden lg:block">{{ player_score.datetime|date:"D M jS - H:i" }}</td>
+                    <td class="py-2 px-5 hidden lg:block">{{ player_score.datetime|date:"M jS (D)" }}</td>
                     <td class="py-2 px-5">
                         {% if player_score.result_of_game.winner == player_score.player %}
                             won from <a class="underline text-sky-600" href="{% url 'player' current_league.slug player_score.result_of_game.loser.name %}">
