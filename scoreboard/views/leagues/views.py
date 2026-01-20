@@ -113,16 +113,14 @@ def new_league_page(request: HttpRequest) -> HttpResponse:
 @require_POST
 @require_POST_params(['league-name', 'league-description'])
 def submit_new_league(request: HttpRequest) -> HttpResponse:
-    return redirect('not-implemented')
+    new_league = League(
+        name=request.POST['league-name'],
+        slug=slugify(request.POST['league-name']),
+        description=request.POST['league-description'],
+        owner=request.user.player  # type: ignore
+    )
+    new_league.save()
 
-    # new_league = League(
-    #     name=request.POST['league-name'],
-    #     slug=slugify(request.POST['league-name']),
-    #     description=request.POST['league-description'],
-    #     owner=request.user.player  # type: ignore
-    # )
-    # new_league.save()
-
-    # new_league.participants.add(request.user.player)  # type: ignore
+    new_league.participants.add(request.user.player)  # type: ignore
     
-    # return redirect('leagues')
+    return redirect('leagues')
