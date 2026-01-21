@@ -3,3 +3,6 @@ db.sqlite3
 dev.env
 node_modules/
 package-lock.json
+staticfiles/
+.venv/
+.env
