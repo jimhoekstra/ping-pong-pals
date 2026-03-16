@@ -1,6 +1,20 @@
 from .models import Player, Game, Rating
 
 
+def compute_elo(winner_elo: int, loser_elo: int, K: int = 32) -> tuple[int, int]:
+    Q_winner = pow(10, winner_elo / 400)
+    Q_loser = pow(10, loser_elo / 400)
+    Q_total = Q_winner + Q_loser
+
+    E_winner = Q_winner / Q_total
+    E_loser = Q_loser / Q_total
+
+    new_winner = winner_elo + round(K * (1.0 - E_winner))
+    new_loser = loser_elo + round(K * (0.0 - E_loser))
+
+    return new_winner, new_loser
+
+
 class EloRating:
 
     def __init__(self, winner: Player, loser: Player):
@@ -13,18 +27,9 @@ class EloRating:
         self.compute_new_scores()
 
     def compute_new_scores(self):
-        Q_winner: float = pow(10, self.winner.current_elo / 400)
-        Q_loser: float = pow(10, self.loser.current_elo / 400)
-        Q_winner_plus_Q_loser: float = Q_winner + Q_loser
-
-        E_winner: float = Q_winner / Q_winner_plus_Q_loser
-        E_loser: float = Q_loser / Q_winner_plus_Q_loser
-
-        change_in_winner_rating: int = round(self.K * (1.0 - E_winner))
-        change_in_loser_rating: int = round(self.K * (0.0 - E_loser))
-
-        self.new_winner_rating = self.winner.current_elo + change_in_winner_rating
-        self.new_loser_rating = self.loser.current_elo + change_in_loser_rating
+        self.new_winner_rating, self.new_loser_rating = compute_elo(
+            self.winner.current_elo, self.loser.current_elo, self.K
+        )
 
     def commit_scores(self, game: Game):
         if self.new_winner_rating is None or self.new_loser_rating is None:
