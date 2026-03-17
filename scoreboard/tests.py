@@ -44,6 +44,31 @@ class TestComputeElo(TestCase):
         self.assertIsInstance(new_winner, int)
         self.assertIsInstance(new_loser, int)
 
+    def test_dominant_win_gains_more_than_narrow_win(self):
+        # 11-0 win should gain more than an 11-10 win, all else equal
+        dominant_winner, _ = compute_elo(1000, 1000, winner_points=11, loser_points=0)
+        narrow_winner, _ = compute_elo(1000, 1000, winner_points=11, loser_points=10)
+        self.assertGreater(dominant_winner, narrow_winner)
+
+    def test_narrow_win_loser_loses_fewer_points_than_dominant_loss(self):
+        _, dominant_loser = compute_elo(1000, 1000, winner_points=11, loser_points=0)
+        _, narrow_loser = compute_elo(1000, 1000, winner_points=11, loser_points=10)
+        self.assertGreater(narrow_loser, dominant_loser)
+
+    def test_score_based_ratings_are_zero_sum(self):
+        # Total rating points must be conserved
+        new_winner, new_loser = compute_elo(1000, 1200, winner_points=11, loser_points=7)
+        self.assertEqual(new_winner + new_loser, 1000 + 1200)
+
+    def test_score_based_returns_integers(self):
+        new_winner, new_loser = compute_elo(1000, 1000, winner_points=11, loser_points=5)
+        self.assertIsInstance(new_winner, int)
+        self.assertIsInstance(new_loser, int)
+
+    def test_no_scores_matches_legacy_behaviour(self):
+        # Omitting points should give the same result as before
+        self.assertEqual(compute_elo(1000, 1000), compute_elo(1000, 1000, winner_points=None, loser_points=None))
+
 
 class TestPages(TestCase):
 

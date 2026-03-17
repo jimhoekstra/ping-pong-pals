@@ -127,7 +127,7 @@ def submit_new_game(request: HttpRequest, league: str) -> HttpResponse:
     
     winner_obj = Player.objects.get(pk=winner_id)
     loser_obj = Player.objects.get(pk=loser_id)
-    elo_rating = EloRating(winner=winner_obj, loser=loser_obj)
+    elo_rating = EloRating(winner=winner_obj, loser=loser_obj, winner_points=winner_points, loser_points=loser_points)
 
     new_game = Game(
         league=league_obj,
