@@ -1,0 +1,16 @@
+[project]
+name = "ping-pong-pals"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "bcrypt>=5.0.0",
+    "itsdangerous>=2.2.0",
+    "sqlalchemy>=2.0.54",
+]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.16.8",
+]
