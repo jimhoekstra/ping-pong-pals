@@ -10,9 +10,9 @@ from newsflash.models import Element
 
 from ping_pong_pals.elements import NavigationLinks
 from ping_pong_pals.database import get_db
-from ping_pong_pals.database.crud import get_user_from_session
+from ping_pong_pals.database.crud import get_user_from_session, get_recent_games
 
-from .elements import NewGameForm
+from .elements import NewGameForm, GamesTable
 from .functions import function_registry
 
 
@@ -26,6 +26,7 @@ class GamesPage(Page):
         session_id = self.request.session.get("session_id")
 
         try:
+            # Ensure user is logged in
             user = get_user_from_session(db=db, session_id=session_id)
 
             if user is None:
@@ -36,6 +37,8 @@ class GamesPage(Page):
                     status_code=status.HTTP_401_UNAUTHORIZED,
                     detail="please log in first",
                 )
+
+            games = get_recent_games(db=db)
         finally:
             db.close()
 
@@ -47,5 +50,8 @@ class GamesPage(Page):
 
         yield Header(id="new-game-form-title", text="Register a New Game", level=2)
         yield NewGameForm()
+
+        yield Header(id="games-table-title", text="Recent Games", level=2)
+        yield GamesTable(data=games)
 
         yield NotificationContainer()

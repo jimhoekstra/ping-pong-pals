@@ -102,15 +102,6 @@ class Game(Base):
 
 class ProcessedGame(BaseModel):
     saved_at: str
-    winner: int
-    loser: int
+    winner: str
+    loser: str
     score: str
-
-    @classmethod
-    def from_db_game(cls, game: Game) -> Self:
-        return cls(
-            saved_at=game.saved_at.strftime("%b %d (%a)"),
-            winner=game.winner,
-            loser=game.loser,
-            score=f"{game.winner_points}-{game.loser_points}",
-        )

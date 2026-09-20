@@ -7,6 +7,7 @@ from newsflash.elements import (
     Button,
     Paragraph,
     Vertical,
+    Table,
 )
 
 
@@ -45,3 +46,7 @@ class NewGameForm(Vertical):
         yield LoserSelect()
         yield LoserPointsInput()
         yield SubmitGameButton()
+
+
+class GamesTable(Table):
+    id: str = "games-table"

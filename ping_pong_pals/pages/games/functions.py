@@ -1,8 +1,8 @@
 from typing import Iterable
 
-from fastapi import HTTPException, status
+from fastapi import HTTPException, status, Request
 from sqlalchemy.exc import IntegrityError
-from newsflash import FunctionRegistry
+from newsflash import FunctionRegistry, Page
 from newsflash.models import Element
 from newsflash.elements import Notification
 
@@ -11,6 +11,8 @@ from ping_pong_pals.database.crud import (
     get_all_users,
     save_game,
     get_id_for_username,
+    get_user_from_session,
+    get_recent_games,
 )
 
 from .elements import (
@@ -19,6 +21,7 @@ from .elements import (
     LoserSelect,
     LoserPointsInput,
     SubmitGameButton,
+    GamesTable,
 )
 
 
@@ -26,9 +29,20 @@ function_registry = FunctionRegistry()
 
 
 @function_registry.add(on=WinnerSelect().search())
-def winner_select_search(winner_select: WinnerSelect) -> Iterable[Element]:
+def winner_select_search(winner_select: WinnerSelect, request: Request) -> Iterable[Element]:
+    session_id = request.session.get("session_id")
     db = get_db()
+    
     try:
+        user = get_user_from_session(db=db, session_id=session_id)
+        
+        # Ensure user is logged in
+        if user is None:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="please log in first",
+            )
+    
         _, all_usernames = get_all_users(db=db)
     finally:
         db.close()
@@ -42,9 +56,20 @@ def winner_selected(winner_select: WinnerSelect) -> Iterable[Element]:
 
 
 @function_registry.add(on=LoserSelect().search())
-def loser_select_search(loser_select: LoserSelect) -> Iterable[Element]:
+def loser_select_search(loser_select: LoserSelect, request: Request) -> Iterable[Element]:
+    session_id = request.session.get("session_id")
     db = get_db()
+
     try:
+        user = get_user_from_session(db=db, session_id=session_id)
+        
+        # Ensure user is logged in
+        if user is None:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="please log in first",
+            )
+        
         _, all_usernames = get_all_users(db=db)
     finally:
         db.close()
@@ -63,6 +88,7 @@ def register_new_game(
     winner_points_input: WinnerPointsInput,
     loser_select: LoserSelect,
     loser_points_input: LoserPointsInput,
+    request: Request,
 ) -> Iterable[Element]:
     if winner_select.value == "" or loser_select.value == "":
         raise HTTPException(
@@ -71,7 +97,18 @@ def register_new_game(
         )
 
     db = get_db()
+    session_id = request.session.get("session_id")
+
     try:
+        user = get_user_from_session(db=db, session_id=session_id)
+
+        # Ensure user is logged in
+        if user is None:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="please log in first",
+            )
+        
         winner_user_id = get_id_for_username(db=db, username=winner_select.value)
         loser_user_id = get_id_for_username(db=db, username=loser_select.value)
 
@@ -89,12 +126,16 @@ def register_new_game(
             loser_points=loser_points_input.value,
         )
 
+        games = get_recent_games(db=db)
+
         yield WinnerSelect()
         yield WinnerPointsInput()
         yield LoserSelect()
         yield LoserPointsInput()
 
+        yield GamesTable(data=games)
         yield Notification(message="Game successfully stored!")
+
     except IntegrityError:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,

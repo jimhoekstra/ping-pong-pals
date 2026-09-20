@@ -35,6 +35,7 @@ class AdminPage(Page):
         session_id = self.request.session.get("session_id")
 
         try:
+            # Ensure user is logged in and is an admin
             user = get_user_from_session(db=db, session_id=session_id)
 
             if user is None or not user.is_admin:

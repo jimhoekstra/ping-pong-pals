@@ -1,10 +1,11 @@
 import secrets
 from datetime import UTC, datetime, timedelta
 
-from sqlalchemy.orm import Session as DBSession
+from sqlalchemy import select
+from sqlalchemy.orm import Session as DBSession, aliased
 
 from .crypto import hash_password, verify_password
-from .models import Game, Session, SignupCode, User
+from .models import Game, Session, SignupCode, User, ProcessedGame
 
 
 class SignupCodeValidationError(Exception):
@@ -119,9 +120,34 @@ def save_game(
     db.commit()
 
 
-def get_recent_games(db: DBSession) -> list[Game]:
-    games = db.query(Game).order_by(Game.saved_at.desc()).all()
-    return games
+def get_recent_games(db: DBSession) -> list[ProcessedGame]:
+    Winner = aliased(User)
+    Loser = aliased(User)
+
+    games_stmt = (
+        select(
+            Game.saved_at,
+            Winner.username.label("winner_username"),
+            Loser.username.label("loser_username"),
+            Game.winner_points,
+            Game.loser_points,
+        )
+        .join(Winner, Game.winner == Winner.id)
+        .join(Loser, Game.loser == Loser.id)
+        .order_by(Game.saved_at.desc())
+    )
+
+    games = db.execute(statement=games_stmt).all()
+    processed_games = [
+        ProcessedGame(
+            saved_at=game.saved_at.strftime("%b %d (%a)"),
+            winner=game.winner_username,
+            loser=game.loser_username,
+            score=f"{game.winner_points}-{game.loser_points}",
+        )
+        for game in games
+    ]
+    return processed_games
 
 
 def get_all_user_ids(db: DBSession) -> list[int]:
