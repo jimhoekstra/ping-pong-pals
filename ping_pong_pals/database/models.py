@@ -13,7 +13,8 @@ class Base(DeclarativeBase):
 class User(Base):
     __tablename__ = "users"
 
-    username: Mapped[str] = mapped_column(String, primary_key=True, index=True)
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    username: Mapped[str] = mapped_column(String, unique=True)
     hashed_password: Mapped[str] = mapped_column(String)
     is_admin: Mapped[bool] = mapped_column(Boolean)
 
@@ -30,7 +31,7 @@ class Session(Base):
     __tablename__ = "sessions"
 
     id: Mapped[str] = mapped_column(String, primary_key=True)
-    username: Mapped[str] = mapped_column(String, ForeignKey("users.username"))
+    user_id: Mapped[str] = mapped_column(String, ForeignKey("users.id"))
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), default=lambda: datetime.now(tz=UTC)
     )
@@ -42,7 +43,7 @@ class Session(Base):
 
 class ProcessedSession(BaseModel):
     id: str
-    username: str
+    user_id: str
     created_at: datetime
     expires_at: datetime
     revoked_at: datetime | None
@@ -51,7 +52,7 @@ class ProcessedSession(BaseModel):
     def from_db_session(cls, session: Session) -> Self:
         return cls(
             id=session.id,
-            username=session.username,
+            user_id=session.user_id,
             created_at=session.created_at,
             expires_at=session.expires_at,
             revoked_at=session.revoked_at,
@@ -63,7 +64,7 @@ class SignupCode(Base):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     code: Mapped[str] = mapped_column(String)
-    used_by: Mapped[str | None] = mapped_column(String, ForeignKey("users.username"))
+    used_by: Mapped[int | None] = mapped_column(String, ForeignKey("users.id"))
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), default=lambda: datetime.now(tz=UTC)
     )
@@ -74,7 +75,7 @@ class SignupCode(Base):
 
 class ProcessedSignupCode(BaseModel):
     code: str
-    used_by: str | None
+    used_by: int | None
     updated_at: datetime
 
     @classmethod
@@ -93,16 +94,16 @@ class Game(Base):
     saved_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), default=lambda: datetime.now(tz=UTC)
     )
-    winner: Mapped[str] = mapped_column(String, ForeignKey("users.username"))
-    loser: Mapped[str] = mapped_column(String, ForeignKey("users.username"))
+    winner: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"))
+    loser: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"))
     winner_points: Mapped[int] = mapped_column(Integer)
     loser_points: Mapped[int] = mapped_column(Integer)
 
 
 class ProcessedGame(BaseModel):
     saved_at: str
-    winner: str
-    loser: str
+    winner: int
+    loser: int
     score: str
 
     @classmethod

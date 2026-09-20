@@ -17,9 +17,10 @@ from sqlalchemy.exc import IntegrityError
 
 from ping_pong_pals.database import get_db
 from ping_pong_pals.database.crud import (
-    get_all_usernames,
+    get_all_users,
     get_user_from_session,
     save_game,
+    get_id_for_username,
 )
 from ping_pong_pals.elements import NavigationLinks
 
@@ -54,7 +55,7 @@ class SubmitGameButton(Button):
 def winner_select_search(winner_select: WinnerSelect) -> Iterable[Element]:
     db = get_db()
     try:
-        all_usernames = get_all_usernames(db=db)
+        _, all_usernames = get_all_users(db=db)
     finally:
         db.close()
 
@@ -70,7 +71,7 @@ def winner_selected(winner_select: WinnerSelect) -> Iterable[Element]:
 def loser_select_search(loser_select: LoserSelect) -> Iterable[Element]:
     db = get_db()
     try:
-        all_usernames = get_all_usernames(db=db)
+        _, all_usernames = get_all_users(db=db)
     finally:
         db.close()
 
@@ -97,10 +98,19 @@ def register_new_game(
 
     db = get_db()
     try:
+        winner_user_id = get_id_for_username(db=db, username=winner_select.value)
+        loser_user_id = get_id_for_username(db=db, username=loser_select.value)
+
+        if winner_user_id is None or loser_user_id is None:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="something went wrong",
+            )
+        
         save_game(
             db=db,
-            winner=winner_select.value,
-            loser=loser_select.value,
+            winner=winner_user_id,
+            loser=loser_user_id,
             winner_points=winner_points_input.value,
             loser_points=loser_points_input.value,
         )

@@ -7,7 +7,7 @@ from newsflash.models import Element
 
 from ping_pong_pals.database import get_db
 from ping_pong_pals.database.crud import (
-    get_all_usernames,
+    get_all_users,
     get_num_played_games,
     get_num_won_games,
     get_user_from_session,
@@ -36,14 +36,14 @@ class PlayersPage(Page):
                     detail="please log in first",
                 )
 
-            all_usernames = get_all_usernames(db=db)
+            all_user_ids, all_usernames = get_all_users(db=db)
             num_played_games = [
-                get_num_played_games(db=db, username=username)
-                for username in all_usernames
+                get_num_played_games(db=db, user_id=user_id)
+                for user_id in all_user_ids
             ]
             num_won_games = [
-                get_num_won_games(db=db, username=username)
-                for username in all_usernames
+                get_num_won_games(db=db, user_id=user_id)
+                for user_id in all_user_ids
             ]
 
         finally:

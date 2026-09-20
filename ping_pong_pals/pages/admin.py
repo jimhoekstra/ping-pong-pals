@@ -64,6 +64,7 @@ def create_new_signup_code_callback(request: Request) -> Iterable[Element]:
     finally:
         db.close()
 
+    yield Notification(message="Created code successfully")
     processed_signup_codes = _db_to_processed_signup_codes(
         signup_codes=all_signup_codes
     )
@@ -100,7 +101,7 @@ def delete_signup_code_callback(
     finally:
         db.close()
 
-    yield Notification(message="Deleted code successfully!")
+    yield Notification(message="Deleted code successfully")
     yield DeleteSignupCodeInput()
     processed_signup_codes = _db_to_processed_signup_codes(
         signup_codes=all_signup_codes

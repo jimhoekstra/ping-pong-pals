@@ -34,13 +34,13 @@ def create_user(db: DBSession, username: str, password: str, signup_code: str) -
     db.add(user)
     db.commit()
 
-    db_signup_code.used_by = user.username
+    db_signup_code.used_by = user.id
     db_signup_code.updated_at = datetime.now(tz=UTC)
     db.commit()
 
 
-def get_user(db: DBSession, username: str) -> User | None:
-    user = db.query(User).filter(User.username == username).first()
+def get_user_by_id(db: DBSession, user_id: int) -> User | None:
+    user = db.query(User).filter(User.id == user_id).first()
     return user
 
 
@@ -53,7 +53,7 @@ def login_user_and_create_session(
     ):
         return None
 
-    session = create_session(db=db, username=user.username)
+    session = create_session(db=db, user_id=user.id)
     return session
 
 
@@ -70,15 +70,15 @@ def get_user_from_session(db: DBSession, session_id: str | None) -> User | None:
     ):
         return None
 
-    user = db.query(User).filter(User.username == session.username).first()
+    user = db.query(User).filter(User.id == session.user_id).first()
     return user
 
 
-def create_session(db: DBSession, username: str) -> Session:
+def create_session(db: DBSession, user_id: int) -> Session:
     session_id = secrets.token_urlsafe(32)
     session = Session(
         id=session_id,
-        username=username,
+        user_id=user_id,
         expires_at=datetime.now(tz=UTC) + timedelta(days=7),
     )
     db.add(session)
@@ -107,7 +107,7 @@ def revoke_session(db: DBSession, session_id: str) -> None:
 
 
 def save_game(
-    db: DBSession, winner: str, loser: str, winner_points: int, loser_points: int
+    db: DBSession, winner: int, loser: int, winner_points: int, loser_points: int
 ) -> None:
     game = Game(
         winner=winner,
@@ -124,22 +124,34 @@ def get_recent_games(db: DBSession) -> list[Game]:
     return games
 
 
-def get_all_usernames(db: DBSession) -> list[str]:
+def get_all_user_ids(db: DBSession) -> list[int]:
     users = db.query(User).all()
-    return [user.username for user in users]
+    return [user.id for user in users]
 
 
-def get_num_played_games(db: DBSession, username: str) -> int:
+def get_all_users(db: DBSession) -> tuple[list[int], list[str]]:
+    users = db.query(User).all()
+    return ([user.id for user in users], [user.username for user in users])
+
+
+def get_id_for_username(db: DBSession, username: str) -> int | None:
+    user = db.query(User).filter(User.username == username).first()
+    if user is None:
+        return None
+    return user.id
+
+
+def get_num_played_games(db: DBSession, user_id: int) -> int:
     played_games = (
         db.query(Game)
-        .filter((Game.winner == username) | (Game.loser == username))
+        .filter((Game.winner == user_id) | (Game.loser == user_id))
         .count()
     )
     return played_games
 
 
-def get_num_won_games(db: DBSession, username: str) -> int:
-    won_games = db.query(Game).filter(Game.winner == username).count()
+def get_num_won_games(db: DBSession, user_id: int) -> int:
+    won_games = db.query(Game).filter(Game.winner == user_id).count()
     return won_games
 
 
