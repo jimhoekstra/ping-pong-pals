@@ -1,28 +1,21 @@
 from collections.abc import Iterable
-from typing import Annotated
 
 from fastapi import HTTPException, Request, status
 from newsflash import FunctionRegistry, Page
-from newsflash.elements import (
-    Button,
-    Header,
-    Input,
-    NotificationContainer,
-    PasswordInput,
-)
-from newsflash.models import ID, Element
+from newsflash.models import Element
 
 from ping_pong_pals.database import get_db
 from ping_pong_pals.database.crud import login_user_and_create_session
-from ping_pong_pals.elements import NavigationLinks
+
+from .elements import UsernameInput, PasswordInput, LoginButton
 
 function_registry = FunctionRegistry()
 
 
-@function_registry.add(on=Button(id="login-button").click())
+@function_registry.add(on=LoginButton().click())
 def login_user(
-    username_input: Annotated[Input, ID("username-input")],
-    password_input: Annotated[PasswordInput, ID("password-input")],
+    username_input: UsernameInput,
+    password_input: PasswordInput,
     request: Request,
 ) -> Iterable[Element]:
     if username_input.value == "" or password_input.value == "":
@@ -50,23 +43,5 @@ def login_user(
     finally:
         db.close()
 
+    # Redirect to home page
     yield Page(path="/")
-
-
-class LoginPage(Page):
-    path: str = "/login"
-    page_title: str = "ping pong pals"
-    function_registry: FunctionRegistry = function_registry
-
-    def compose(self) -> Iterable[Element]:
-        yield Header(id="page-header", text="Login")
-        yield NavigationLinks(is_logged_in=False, is_admin=False)
-        yield Header(id="login-form-header", text="Login Form", level=2)
-        yield from _empty_inputs()
-        yield Button(id="login-button", label="Login")
-        yield NotificationContainer()
-
-
-def _empty_inputs() -> Iterable[Element]:
-    yield Input(id="username-input", placeholder="username")
-    yield PasswordInput(id="password-input", placeholder="password")

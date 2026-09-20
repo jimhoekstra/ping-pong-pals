@@ -1,17 +1,8 @@
 from collections.abc import Iterable
-from typing import Annotated
 
 from fastapi import HTTPException, Request, status
 from newsflash import FunctionRegistry, Page
-from newsflash.elements import (
-    Button,
-    Header,
-    Input,
-    NotificationContainer,
-    Paragraph,
-    PasswordInput,
-)
-from newsflash.models import ID, Element
+from newsflash.models import Element
 from sqlalchemy.exc import IntegrityError
 
 from ping_pong_pals.database import get_db
@@ -20,19 +11,25 @@ from ping_pong_pals.database.crud import (
     create_user,
     login_user_and_create_session,
 )
-from ping_pong_pals.elements import NavigationLinks
+
+from .elements import (
+    UsernameInput,
+    PasswordInput,
+    PasswordConfirmationInput,
+    SignupCodeInput,
+    RegisterButton,
+)
+
 
 function_registry = FunctionRegistry()
 
 
-@function_registry.add(on=Button(id="register-button").click())
+@function_registry.add(on=RegisterButton().click())
 def register_user(
-    username_input: Annotated[Input, ID("username-input")],
-    password_input: Annotated[PasswordInput, ID("password-input")],
-    password_confirmation_input: Annotated[
-        PasswordInput, ID("password-confirmation-input")
-    ],
-    signup_code_input: Annotated[Input, ID("signup-code-input")],
+    username_input: UsernameInput,
+    password_input: PasswordInput,
+    password_confirmation_input: PasswordConfirmationInput,
+    signup_code_input: SignupCodeInput,
     request: Request,
 ) -> Iterable[Element]:
     if username_input.value == "":
@@ -82,33 +79,3 @@ def register_user(
         )
     finally:
         db.close()
-
-
-class RegisterPage(Page):
-    path: str = "/register"
-    page_title: str = "ping pong pals"
-    function_registry: FunctionRegistry = function_registry
-
-    def compose(self) -> Iterable[Element]:
-        yield Header(id="page-header", text="Register")
-        yield NavigationLinks(is_logged_in=False, is_admin=False)
-        yield Header(id="register-form-header", text="Registration Form", level=2)
-        yield Paragraph(
-            id="register-form-paragraph",
-            text=(
-                "Note: you will a signup code to register. Please ask your site "
-                "administrator if you don't have one yet."
-            ),
-        )
-        yield from _empty_inputs()
-        yield Button(id="register-button", label="Register")
-        yield NotificationContainer()
-
-
-def _empty_inputs() -> Iterable[Element]:
-    yield Input(id="username-input", placeholder="username")
-    yield PasswordInput(id="password-input", placeholder="password")
-    yield PasswordInput(
-        id="password-confirmation-input", placeholder="confirm password"
-    )
-    yield Input(id="signup-code-input", placeholder="signup code")
