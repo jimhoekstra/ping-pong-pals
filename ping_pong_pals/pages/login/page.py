@@ -4,6 +4,7 @@ from newsflash import FunctionRegistry, Page
 from newsflash.elements import (
     Header,
     NotificationContainer,
+    Paragraph,
 )
 from newsflash.models import Element
 
@@ -23,6 +24,7 @@ class LoginPage(Page):
         yield NavigationLinks(is_logged_in=False, is_admin=False)
 
         yield Header(id="login-form-header", text="Login Form", level=2)
+        yield Paragraph(id="login-form-paragraph", text="Enter your login credentials below to log in.")
         yield UsernameInput()
         yield PasswordInput()
         yield LoginButton()
