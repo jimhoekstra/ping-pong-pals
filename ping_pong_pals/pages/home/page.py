@@ -24,7 +24,7 @@ class HomePage(Page):
 
         username = f", {user.username}" if user is not None else ""
 
-        yield Header(id="title", text="Ping Pong Pals 🏓")
+        yield Header(id="title", text="Ping Pong Pals")
         yield NavigationLinks(
             is_logged_in=user is not None,
             is_admin=user.is_admin if user is not None else False,
