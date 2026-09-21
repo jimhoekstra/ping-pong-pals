@@ -29,20 +29,22 @@ function_registry = FunctionRegistry()
 
 
 @function_registry.add(on=WinnerSelect().search())
-def winner_select_search(winner_select: WinnerSelect, request: Request) -> Iterable[Element]:
+def winner_select_search(
+    winner_select: WinnerSelect, request: Request
+) -> Iterable[Element]:
     session_id = request.session.get("session_id")
     db = get_db()
-    
+
     try:
         user = get_user_from_session(db=db, session_id=session_id)
-        
+
         # Ensure user is logged in
         if user is None:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="please log in first",
             )
-    
+
         _, all_usernames = get_all_users(db=db)
     finally:
         db.close()
@@ -56,20 +58,22 @@ def winner_selected(winner_select: WinnerSelect) -> Iterable[Element]:
 
 
 @function_registry.add(on=LoserSelect().search())
-def loser_select_search(loser_select: LoserSelect, request: Request) -> Iterable[Element]:
+def loser_select_search(
+    loser_select: LoserSelect, request: Request
+) -> Iterable[Element]:
     session_id = request.session.get("session_id")
     db = get_db()
 
     try:
         user = get_user_from_session(db=db, session_id=session_id)
-        
+
         # Ensure user is logged in
         if user is None:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="please log in first",
             )
-        
+
         _, all_usernames = get_all_users(db=db)
     finally:
         db.close()
@@ -108,7 +112,7 @@ def register_new_game(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="please log in first",
             )
-        
+
         winner_user_id = get_id_for_username(db=db, username=winner_select.value)
         loser_user_id = get_id_for_username(db=db, username=loser_select.value)
 
@@ -117,7 +121,7 @@ def register_new_game(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail="something went wrong",
             )
-        
+
         save_game(
             db=db,
             winner=winner_user_id,

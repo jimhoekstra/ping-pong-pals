@@ -41,4 +41,3 @@ class DeleteSignupCodeForm(Vertical):
     def compose(self) -> Iterable[Element]:
         yield DeleteSignupCodeInput()
         yield DeleteSignupCodeButton()
-    

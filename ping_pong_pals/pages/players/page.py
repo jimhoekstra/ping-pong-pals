@@ -39,12 +39,10 @@ class PlayersPage(Page):
 
             all_user_ids, all_usernames = get_all_users(db=db)
             num_played_games = [
-                get_num_played_games(db=db, user_id=user_id)
-                for user_id in all_user_ids
+                get_num_played_games(db=db, user_id=user_id) for user_id in all_user_ids
             ]
             num_won_games = [
-                get_num_won_games(db=db, user_id=user_id)
-                for user_id in all_user_ids
+                get_num_won_games(db=db, user_id=user_id) for user_id in all_user_ids
             ]
 
         finally:

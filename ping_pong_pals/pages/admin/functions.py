@@ -16,7 +16,7 @@ from ping_pong_pals.database.crud import (
 from ping_pong_pals.database.models import ProcessedSignupCode
 
 from .elements import (
-    NewSignupCodeButton, 
+    NewSignupCodeButton,
     SignupCodesTable,
     DeleteSignupCodeButton,
     DeleteSignupCodeInput,

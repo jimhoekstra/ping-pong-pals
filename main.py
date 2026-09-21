@@ -1,3 +1,5 @@
+import os
+
 from newsflash import NewsflashApp
 from starlette.middleware.sessions import SessionMiddleware
 
@@ -26,4 +28,6 @@ app = NewsflashApp(
         AdminPage,
     ]
 )
-app.add_middleware(SessionMiddleware, secret_key="very-secret")
+app.add_middleware(
+    SessionMiddleware, secret_key=os.environ["PING_PONG_PALS_SECRET_KEY"]
+)
