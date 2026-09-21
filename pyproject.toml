@@ -23,3 +23,6 @@ module-name = "ping_pong_pals"
 dev = [
     "ruff>=0.16.8",
 ]
+
+[tool.fastapi]
+entrypoint = "main:app"
