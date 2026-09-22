@@ -8,6 +8,11 @@ from .crypto import hash_password, verify_password
 from .models import Game, Session, SignupCode, User, ProcessedGame
 
 
+# TODO: eventually all crud code should move to the _crud module.
+# Then that module will be renamed to crud and this fill will
+# be deleted.
+
+
 class SignupCodeValidationError(Exception):
     pass
 

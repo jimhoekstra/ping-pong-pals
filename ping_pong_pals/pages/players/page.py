@@ -1,8 +1,8 @@
 from collections.abc import Iterable
 
 from fastapi import HTTPException, status
-from newsflash import Page
-from newsflash.elements import Header, Table
+from newsflash import Page, FunctionRegistry
+from newsflash.elements import Header
 from newsflash.models import Element
 
 from ping_pong_pals.database import get_db
@@ -15,10 +15,14 @@ from ping_pong_pals.database.crud import (
 from ping_pong_pals.database.models import ProcessedUser
 from ping_pong_pals.elements import NavigationLinks
 
+from .elements import PlayersPlot, PlayersTable, PlotWonGamesToggle
+from .functions import function_registry
+
 
 class PlayersPage(Page):
     path: str = "/players"
     page_title: str = "ping pong pals"
+    function_registry: FunctionRegistry = function_registry
 
     def compose(self) -> Iterable[Element]:
         db = get_db()
@@ -68,4 +72,8 @@ class PlayersPage(Page):
         ]
 
         yield Header(id="player-ranking", text="Player Ranking", level=2)
-        yield Table[ProcessedUser](id="players-table", data=processed_users)
+        yield PlayersTable(data=processed_users)
+
+        yield Header(id="num-played-games-header", text="Num Played Games", level=2)
+        yield PlotWonGamesToggle()
+        yield PlayersPlot(height=50 + 50 * len(processed_users))
