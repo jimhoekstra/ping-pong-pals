@@ -76,4 +76,4 @@ class PlayersPage(Page):
 
         yield Header(id="num-played-games-header", text="Num Played Games", level=2)
         yield PlotWonGamesToggle()
-        yield PlayersPlot(height=50 + 50 * len(processed_users))
+        yield PlayersPlot(height=50 + 40 * len(processed_users))
