@@ -6,12 +6,8 @@ from newsflash.elements import Header
 from newsflash.models import Element
 
 from ping_pong_pals.database import get_db
-from ping_pong_pals.database.crud import (
-    get_all_users,
-    get_num_played_games,
-    get_num_won_games,
-    get_user_from_session,
-)
+from ping_pong_pals.database.crud import get_user_from_session
+from ping_pong_pals.database._crud import PlayerDetails
 from ping_pong_pals.database.models import ProcessedUser
 from ping_pong_pals.elements import NavigationLinks
 
@@ -41,13 +37,7 @@ class PlayersPage(Page):
                     detail="please log in first",
                 )
 
-            all_user_ids, all_usernames = get_all_users(db=db)
-            num_played_games = [
-                get_num_played_games(db=db, user_id=user_id) for user_id in all_user_ids
-            ]
-            num_won_games = [
-                get_num_won_games(db=db, user_id=user_id) for user_id in all_user_ids
-            ]
+            player_details = PlayerDetails.get_for_all_players(db=db, sort_by="num_games_won")
 
         finally:
             db.close()
@@ -61,14 +51,12 @@ class PlayersPage(Page):
         processed_users = [
             ProcessedUser(
                 rank="t.b.d.",
-                username=username,
-                games_played=played_games,
-                games_won=won_games,
+                username=player.username,
+                games_played=player.num_games_played,
+                games_won=player.num_games_won,
                 elo_score="t.b.d.",
             )
-            for username, played_games, won_games in zip(
-                all_usernames, num_played_games, num_won_games
-            )
+            for player in player_details[::-1]
         ]
 
         yield Header(id="player-ranking", text="Player Ranking", level=2)
