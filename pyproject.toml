@@ -7,7 +7,7 @@ requires-python = ">=3.13"
 dependencies = [
     "bcrypt>=5.0.0",
     "itsdangerous>=2.2.0",
-    "newsflash>=0.3.4",
+    "newsflash>=0.3.5",
     "sqlalchemy>=2.0.54",
 ]
 
