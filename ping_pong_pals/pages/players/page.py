@@ -59,6 +59,10 @@ class PlayersPage(Page):
             for player in player_details[::-1]
         ]
 
+        processed_users = [
+            player for player in processed_users if player.games_played > 0
+        ]
+
         yield Header(id="player-ranking", text="Player Ranking", level=2)
         yield PlayersTable(data=processed_users)
 

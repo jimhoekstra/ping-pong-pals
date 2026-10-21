@@ -2,6 +2,7 @@ import os
 
 from newsflash import NewsflashApp
 from starlette.middleware.sessions import SessionMiddleware
+from starlette.middleware.trustedhost import TrustedHostMiddleware
 
 from ping_pong_pals.database import create_all
 from ping_pong_pals.pages import (
@@ -29,5 +30,8 @@ app = NewsflashApp(
     ]
 )
 app.add_middleware(
-    SessionMiddleware, secret_key=os.environ["PING_PONG_PALS_SECRET_KEY"]
+    SessionMiddleware, secret_key=os.environ["PING_PONG_PALS_SECRET_KEY"],
+)
+app.add_middleware(
+    TrustedHostMiddleware, allowed_hosts=os.environ["PING_PONG_PALS_ALLOWED_HOSTS"].split(";"),
 )

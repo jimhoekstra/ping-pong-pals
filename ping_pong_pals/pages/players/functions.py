@@ -42,6 +42,10 @@ def load_players_plot(
     finally:
         db.close()
 
+    player_details = [
+        player for player in player_details if player.num_games_played > 0
+    ]
+
     xs = [player.username for player in player_details]
     if plot_won_games_toggle.checked:
         ys = [player.num_games_won for player in player_details]

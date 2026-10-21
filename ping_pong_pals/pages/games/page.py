@@ -52,6 +52,6 @@ class GamesPage(Page):
         yield NewGameForm()
 
         yield Header(id="games-table-title", text="Recent Games", level=2)
-        yield GamesTable(data=games)
+        yield GamesTable(data=games[:15])
 
         yield NotificationContainer()
