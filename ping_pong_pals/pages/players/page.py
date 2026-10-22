@@ -50,11 +50,11 @@ class PlayersPage(Page):
 
         processed_users = [
             ProcessedUser(
-                rank=idx + 1,
+                rank=str(idx + 1) if player.num_games_played >= 3 else "---",
                 username=player.username,
                 games_played=player.num_games_played,
                 games_won=player.num_games_won,
-                elo_score=player.elo_rating,
+                elo_score=str(player.elo_rating) if player.num_games_played >= 3 else "---",
             )
             for idx, player in enumerate(
                 sorted(player_details, key=lambda x: x.elo_rating, reverse=True)

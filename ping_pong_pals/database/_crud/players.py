@@ -38,7 +38,7 @@ class PlayerDetails(BaseModel):
         parsed_result = [
             cls(
                 username=row.username,
-                elo_rating=row.elo_rating,
+                elo_rating=row.elo_rating if row.num_games_played >= 3 else 0,
                 num_games_played=row.num_games_played,
                 num_games_won=row.num_games_won,
             )

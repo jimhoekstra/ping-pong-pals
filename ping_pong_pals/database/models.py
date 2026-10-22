@@ -21,11 +21,11 @@ class User(Base):
 
 
 class ProcessedUser(BaseModel):
-    rank: int
+    rank: str
     username: str
     games_played: int
     games_won: int
-    elo_score: int
+    elo_score: str
 
 
 class Session(Base):
