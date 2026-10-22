@@ -50,17 +50,15 @@ class PlayersPage(Page):
 
         processed_users = [
             ProcessedUser(
-                rank="t.b.d.",
+                rank=idx + 1,
                 username=player.username,
                 games_played=player.num_games_played,
                 games_won=player.num_games_won,
-                elo_score="t.b.d.",
+                elo_score=player.elo_rating,
             )
-            for player in player_details[::-1]
-        ]
-
-        processed_users = [
-            player for player in processed_users if player.games_played > 0
+            for idx, player in enumerate(
+                sorted(player_details, key=lambda x: x.elo_rating, reverse=True)
+            )
         ]
 
         yield Header(id="player-ranking", text="Player Ranking", level=2)
@@ -68,4 +66,8 @@ class PlayersPage(Page):
 
         yield Header(id="num-played-games-header", text="Num Played Games", level=2)
         yield PlotWonGamesToggle()
-        yield PlayersPlot(height=50 + 40 * len(processed_users))
+
+        processed_users_subset = [
+            player for player in processed_users if player.games_played > 0
+        ]
+        yield PlayersPlot(height=50 + 40 * len(processed_users_subset))

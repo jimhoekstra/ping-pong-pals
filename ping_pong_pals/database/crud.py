@@ -211,3 +211,12 @@ def delete_signup_code(db: DBSession, code: str) -> bool:
     db.delete(signup_code)
     db.commit()
     return True
+
+
+def update_elo_rating_for_user(db: DBSession, username: str, elo_rating: int) -> None:
+    user = db.query(User).filter(User.username == username).first()
+    if user is None:
+        raise ValueError("username does not exist")
+
+    user.elo_rating = elo_rating
+    db.commit()

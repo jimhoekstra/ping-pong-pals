@@ -9,6 +9,7 @@ from ping_pong_pals.database.models import Game, User
 
 class PlayerDetails(BaseModel):
     username: str
+    elo_rating: int
     num_games_played: int
     num_games_won: int
 
@@ -24,6 +25,7 @@ class PlayerDetails(BaseModel):
         statement = (
             select(
                 User.username,
+                User.elo_rating,
                 func.count(games.c.user).label("num_games_played"),
                 func.coalesce(func.sum(games.c.won), 0).label("num_games_won"),
             )
@@ -36,6 +38,7 @@ class PlayerDetails(BaseModel):
         parsed_result = [
             cls(
                 username=row.username,
+                elo_rating=row.elo_rating,
                 num_games_played=row.num_games_played,
                 num_games_won=row.num_games_won,
             )

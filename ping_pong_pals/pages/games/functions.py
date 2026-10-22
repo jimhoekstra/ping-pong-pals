@@ -2,7 +2,7 @@ from typing import Iterable
 
 from fastapi import HTTPException, status, Request
 from sqlalchemy.exc import IntegrityError
-from newsflash import FunctionRegistry, Page
+from newsflash import FunctionRegistry
 from newsflash.models import Element
 from newsflash.elements import Notification
 
@@ -14,6 +14,7 @@ from ping_pong_pals.database.crud import (
     get_user_from_session,
     get_recent_games,
 )
+from ping_pong_pals.scores import recompute_all_scores
 
 from .elements import (
     WinnerSelect,
@@ -131,6 +132,8 @@ def register_new_game(
         )
 
         games = get_recent_games(db=db)
+
+        recompute_all_scores(db=db)
 
         yield WinnerSelect()
         yield WinnerPointsInput()

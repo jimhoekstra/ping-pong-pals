@@ -17,14 +17,15 @@ class User(Base):
     username: Mapped[str] = mapped_column(String, unique=True)
     hashed_password: Mapped[str] = mapped_column(String)
     is_admin: Mapped[bool] = mapped_column(Boolean)
+    elo_rating: Mapped[int] = mapped_column(Integer)
 
 
 class ProcessedUser(BaseModel):
-    rank: str
+    rank: int
     username: str
     games_played: int
     games_won: int
-    elo_score: str
+    elo_score: int
 
 
 class Session(Base):
