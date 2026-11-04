@@ -1088,7 +1088,7 @@ wheels = [
 
 [[package]]
 name = "newsflash"
-version = "0.3.10"
+version = "0.3.11"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "certifi" },
@@ -1097,9 +1097,9 @@ dependencies = [
     { name = "matplotlib" },
     { name = "pydantic" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/e7/eb/174ae8606caf2d7360a61e0868407183fecac6ba99e92f87d161d22c6c90/newsflash-0.3.10.tar.gz", hash = "sha256:6681fa745f2aeec5644d622cabf9a8393753d0d6389e6381ece26f8ac032d69b", size = 15559, upload-time = "2026-11-04T16:39:08.602Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/3c/df/17f3c748910b239224b7de4e30f897f8f56456de3690080a78de62e657af/newsflash-0.3.11.tar.gz", hash = "sha256:747c818552058c26f5fa1f783101103398299b722ea704c32a83ee94b937cb0c", size = 15562, upload-time = "2026-11-04T16:48:37.027Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/ed/84/d995c5e7e86c6e5aba7d031c3fc3bc1db034c2af1fc79940f422cf05a078/newsflash-0.3.10-py3-none-any.whl", hash = "sha256:af6f7d4093e2c7db36007df06d0ffef5700931a8d11f6eb0955051d80c72f1f8", size = 31004, upload-time = "2026-11-04T16:39:07.503Z" },
+    { url = "https://files.pythonhosted.org/packages/a3/63/c478b7fef1783fee3ce44814989f506edcf494a6eddad8f685f7f16a37db/newsflash-0.3.11-py3-none-any.whl", hash = "sha256:ea0afcc73f5f23a5ef4db73f9566ab39eabc2e092761e0cf949c6343ae59c94e", size = 31004, upload-time = "2026-11-04T16:48:35.837Z" },
 ]
 
 [[package]]
@@ -1367,7 +1367,7 @@ dev = [
 requires-dist = [
     { name = "bcrypt", specifier = ">=5.0.0" },
     { name = "itsdangerous", specifier = ">=2.2.0" },
-    { name = "newsflash", specifier = ">=0.3.10" },
+    { name = "newsflash", specifier = ">=0.3.11" },
     { name = "sqlalchemy", specifier = ">=2.0.54" },
 ]
 
