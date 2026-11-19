@@ -36,6 +36,7 @@ def create_user(db: DBSession, username: str, password: str, signup_code: str) -
         username=username,
         hashed_password=hash_password(password=password),
         is_admin=False,
+        elo_rating=1000,
     )
     db.add(user)
     db.commit()
